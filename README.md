@@ -1,6 +1,15 @@
+# React.js Development Environment Setup
+Prerequisites
+Before you begin, ensure you have the following installed on your machine:
+npm (Node Package Manager)
+React.js relies on Node.js and npm. Download 10.4.0
+and install them from https://nodejs.org/. npm (Node Package Manager) comes bundled with Node.js.
+Clone Repository
 # Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Clone Repository
+git clone https://github.com/William-Dou/tasktracker.git
+
 
 ## Available Scripts
 
