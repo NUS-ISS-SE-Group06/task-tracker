@@ -7,90 +7,30 @@ on:
   push:
     branches:
       - dev
-    paths:
-      - 'src/**'
-      - 'pom.xml'
 
 jobs:
   test_build:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Source Codes
-        uses: actions/checkout@v4
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-          cache: maven
-      - name: Cache Maven Packages
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.m2
-            target
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2  
-      - name: Build with Maven
-        run: mvn -B clean package
-  unit_test:
-    needs: test_build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Source Codes
-        uses: actions/checkout@v4
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-          cache: maven
-      - name: Cache Maven Packages
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.m2
-            target
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2  
-      - name: Run Test with Maven
-        run: mvn -B test
-      - name: List Contents of target Directory
-        run: ls -R target
-  code_scan:
-    needs: unit_test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Source Codes
-        uses: actions/checkout@v4
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-          cache: maven
-      - name: Cache Maven Packages
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.m2
-            target
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - name: List Contents of target Directory
-        run: ls -R target
-      - name: Cache SonarCloud Packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-      - name: Build and analyze on SonarCloud
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x, 15.x]
         
+    steps:
+      - name: Checkout Source Codes
+        uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm test
+      - name: Deploy to Github Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: build
 
+        
     
         
