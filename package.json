@@ -1,5 +1,5 @@
 {
-  "name": "task-traker",
+  "name": "task-tracker",
   "version": "0.1.0",
   "homepage": "https://nus-iss-se-group06.github.io/task-tracker/",
   "private": true,
@@ -37,5 +37,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^6.1.1"
   }
 }
