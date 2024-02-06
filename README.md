@@ -8,7 +8,7 @@ Clone Repository
 # Getting Started with Create React App
 
 # Clone Repository
-git clone https://github.com/William-Dou/tasktracker.git
+git clone https://github.com/NUS-ISS-SE-Group06/task-tracker.git
 
 
 ## Available Scripts
