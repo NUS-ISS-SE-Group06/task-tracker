@@ -1,0 +1,36 @@
+name: dev_test_build
+on:
+  # This workflow is automatically triggered upon a push request to the development branch. 
+  # The test-build : indicating whether your code commits are not breaking during compilation.
+  # The unit-test : indicating whether your funtionalities are not breaking.
+  # The Sonar : indicating whether your code commits are not violating code scan rules.
+  push:
+    branches:
+      - dev
+
+jobs:
+  test_build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x, 15.x]
+        
+    steps:
+      - name: Checkout Source Codes
+        uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm test
+      - name: Deploy to Github Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: build
+
+        
+    
+        
