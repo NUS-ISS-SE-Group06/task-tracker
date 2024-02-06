@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 15.x]
+        node-version: [21.x]
         
     steps:
       - name: Checkout Source Codes
@@ -29,6 +29,8 @@ jobs:
       - name: Deploy to Github Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
+          token: ${{ secrets.GH_TOKEN }}
+          branch: gh-pages
           folder: build
 
         
