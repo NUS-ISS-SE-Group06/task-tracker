@@ -39,11 +39,11 @@ jobs:
       - run: npm run build --if-present
       - run: npm test
       - name: List Contents of public Directory
-        run: ls -R public
+        run: ls -R build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'public/build'      
+          path: 'build'      
   code_scan:
     needs: test_build
     runs-on: ubuntu-latest
