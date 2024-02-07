@@ -58,7 +58,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}     
   uat_deploy:
-    needs: test_build
+    needs: code_scan
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -75,26 +75,24 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run build --if-present
-      - run: ls -R build
-      - name: Deploy to Github Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          token: ${{ secrets.GH_TOKEN }}
-          branch: gh-pages-uat
-          folder: build 
+      #- run: ls -R build
+      #- name: Deploy to Github Pages
+      #  uses: JamesIves/github-pages-deploy-action@v4
+      #  with:
+      #    token: ${{ secrets.GH_TOKEN }}
+      #    branch: gh-pages-uat
+      #    folder: build 
       - name: List Contents of build Directory
         run: ls -R build  
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:  
           path: build
-
       #- name: Upload artifact
       #  uses: actions/upload-artifact@v4
       #  with:
       #    name: github-pages
       #    path: build
-      
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
