@@ -38,8 +38,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-
+  uat_deploy:
+    needs: test_build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy GitHub Pages site
+        uses: actions/deploy-pages@v4.0.4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          timeout: 300000  # Time in milliseconds after which to timeout and cancel the deployment (default: 10 minutes)
+          error_count: 10  # Maximum number of status report errors before cancelling a deployment (default: 10)
+          reporting_interval: 5000     # Time in milliseconds between two deployment status report (default: 5 seconds)
+          artifact_name: gh-pages-uat
 
         
 
