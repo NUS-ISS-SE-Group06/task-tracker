@@ -69,16 +69,21 @@ jobs:
     runs-on: ubuntu-latest
     needs: test_build
     steps:
+      - name: Checkout Source Codes
+        uses: actions/checkout@v4
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: github_pages
+          path: build 
+      - name: List Contents of build Directory
+        run: ls -R build
       #- name: Deploy to GitHub Pages
       #  id: deployment
       #  uses: actions/deploy-pages@v4
       #  with:
       #     timeout: 300000  # Time to timeout and cancel the deployment (5 minutes)
       #- run: echo ${{ steps.deployment.outputs.page_url }}
-      - name: Checkout Source Codes
-        uses: actions/checkout@v4
-      - name: List Contents of build Directory
-        run: ls -R build
       - name: Deploy to Github Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
