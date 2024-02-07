@@ -7,7 +7,6 @@ on:
   pull_request:
     types:
       - closed
-  workflow_dispatch:  # Allow manual triggering
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
