@@ -68,8 +68,6 @@ jobs:
         uses: actions/deploy-pages@v4
         with:
            timeout: 0
-      - name: Output GitHub Variable
-        run: echo "$GITHUB_CONTEXT"
         
         
     
