@@ -24,12 +24,6 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test
-      - name: Deploy to Github Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          token: ${{ secrets.GH_TOKEN }}
-          branch: gh-pages-uat
-          folder: build
   code_scan:
     needs: test_build
     runs-on: ubuntu-latest
