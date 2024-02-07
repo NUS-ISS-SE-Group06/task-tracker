@@ -13,8 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [21.x]
-        
+        node-version: [21.x]     
     steps:
       - name: Checkout Source Codes
         uses: actions/checkout@v4
@@ -32,6 +31,23 @@ jobs:
           token: ${{ secrets.GH_TOKEN }}
           branch: gh-pages
           folder: build
+  code_scan:
+    needs: test_build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Codes
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Analyze on SonarCloud
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+
+
+        
 
         
     
