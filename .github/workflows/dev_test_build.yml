@@ -84,11 +84,14 @@ jobs:
           folder: build 
       - name: List Contents of build Directory
         run: ls -R build
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: github-pages
-          path: build
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+    
+      #- name: Upload artifact
+      #  uses: actions/upload-artifact@v4
+      #  with:
+      #    name: github-pages
+      #    path: build
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v3
