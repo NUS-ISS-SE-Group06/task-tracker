@@ -68,6 +68,7 @@ jobs:
         uses: actions/deploy-pages@v4
         with:
            timeout: 300000  # Time to timeout and cancel the deployment (5 minutes)
+           reporting_interval: 300000 # Time in milliseconds between two deployment status report (default:
         
         
     
