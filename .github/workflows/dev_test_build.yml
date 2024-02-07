@@ -69,7 +69,7 @@ jobs:
         with:
            timeout: 0
       - name: Print GitHub Pages URL
-        run: echo "Deployed URL: ${{ steps.deployment.outputs.page_url }}"
+        run: echo "Deployed URL: ${{ environment.url }}"
         
         
     
