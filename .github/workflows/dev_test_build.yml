@@ -47,6 +47,12 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}     
   uat_deploy:
     needs: code_scan
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Source Codes
@@ -74,3 +80,12 @@ jobs:
         with:
           name: github_pages
           path: build
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v3
+        with:
+           timeout: 300000  # Time to timeout and cancel the deployment (5 minutes)
+      - run: echo ${{ steps.deployment.outputs.page_url }}
+
+
+
