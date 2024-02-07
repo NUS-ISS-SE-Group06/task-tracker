@@ -48,9 +48,6 @@ jobs:
   uat_deploy:
     needs: code_scan
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [21.x]  
     steps:
       - name: Checkout Source Codes
         uses: actions/checkout@v4
