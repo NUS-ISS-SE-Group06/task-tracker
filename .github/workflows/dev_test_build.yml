@@ -64,10 +64,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: test_build
     steps:
-      - name: Checkout Source Codes
-        uses: actions/checkout@v4
-        with: 
-          ref: dev
+      #- name: Checkout Source Codes
+      #  uses: actions/checkout@v4
+      #  with: 
+      #    ref: dev
       #- name: Download artifact
       #  uses: actions/download-artifact@v4
       #  with:
