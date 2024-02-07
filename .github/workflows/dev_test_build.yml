@@ -43,7 +43,7 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test
-      - name: List Contents of public Directory
+      - name: List Contents of build Directory
         run: ls -R build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -75,6 +75,10 @@ jobs:
       #  with:
       #     timeout: 300000  # Time to timeout and cancel the deployment (5 minutes)
       #- run: echo ${{ steps.deployment.outputs.page_url }}
+      - name: Checkout Source Codes
+        uses: actions/checkout@v4
+      - name: List Contents of build Directory
+        run: ls -R build
       - name: Deploy to Github Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
