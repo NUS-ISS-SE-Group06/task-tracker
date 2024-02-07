@@ -50,6 +50,9 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  
   prd_deploy:
     needs: code_scan
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest  
     steps:
       - name: Checkout Source Codes
@@ -63,20 +66,21 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run build --if-present
-      - run: ls -R build
-      - name: Deploy to Github Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          token: ${{ secrets.GH_TOKEN }}
-          branch: gh-pages
-          folder: build 
+      #- run: ls -R build
+      #- name: Deploy to Github Pages
+      #  uses: JamesIves/github-pages-deploy-action@v4
+      #  with:
+      #    token: ${{ secrets.GH_TOKEN }}
+      #    branch: gh-pages
+      #    folder: build 
       - name: List Contents of build Directory
         run: ls -R build
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: github_pages
           path: build
-    
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
 
           
