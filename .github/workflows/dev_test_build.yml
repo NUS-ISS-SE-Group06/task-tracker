@@ -100,7 +100,8 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v3
         with:
-           timeout: 300000  # Time to timeout and cancel the deployment (5 minutes)
+          token: ${{ secrets.GH_TOKEN }}
+          timeout: 300000  # Time to timeout and cancel the deployment (5 minutes)
       - run: echo ${{ steps.deployment.outputs.page_url }}
 
 
