@@ -42,14 +42,12 @@ jobs:
     needs: test_build
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy GitHub Pages site
-        uses: actions/deploy-pages@v4.0.4
+      - name: Deploy to Github Pages
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           token: ${{ secrets.GH_TOKEN }}
-          timeout: 300000  # Time in milliseconds after which to timeout and cancel the deployment (default: 10 minutes)
-          error_count: 10  # Maximum number of status report errors before cancelling a deployment (default: 10)
-          reporting_interval: 5000     # Time in milliseconds between two deployment status report (default: 5 seconds)
-          artifact_name: gh-pages-uat
+          branch: gh-pages-uat
+          folder: build
 
         
 
