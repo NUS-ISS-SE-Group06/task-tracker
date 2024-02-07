@@ -71,4 +71,4 @@ jobs:
         with:
           token: ${{ secrets.GH_TOKEN }}
           branch: gh-pages-uat
-          folder: github_pages
+          folder: ./github_pages
