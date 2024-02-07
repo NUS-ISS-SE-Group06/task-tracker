@@ -68,9 +68,8 @@ jobs:
         uses: actions/deploy-pages@v4
         with:
            timeout: 0
-      - name: GitHub Pages Info
-      - run: |
-          echo ${{ steps.deployment.outputs.page_url }}
+      - name: Print GitHub Pages URL
+        run: echo "Deployed URL: ${{ steps.deployment.outputs.page_url }}"
         
         
     
