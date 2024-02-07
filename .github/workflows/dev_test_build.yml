@@ -68,8 +68,8 @@ jobs:
         uses: actions/deploy-pages@v4
         with:
            timeout: 0
-      - name: Print GitHub Pages URL
-        run: echo "Deployed URL:"
+      - name: Output GitHub Variable
+        run: echo "$GITHUB_CONTEXT"
         
         
     
