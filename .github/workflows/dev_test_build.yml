@@ -48,18 +48,15 @@ jobs:
   uat_deploy:
     needs: code_scan
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [21.x]  
     steps:
       - name: Checkout Source Codes
         uses: actions/checkout@v4
         with: 
           ref: dev
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 21.x
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '21.x'
           cache: 'npm'
       - run: npm ci
       - run: npm run build --if-present
