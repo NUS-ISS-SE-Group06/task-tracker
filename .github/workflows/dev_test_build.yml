@@ -50,11 +50,19 @@ jobs:
         with:
           name: github_pages
           path: build
+
+
+
+  uat_deploy:
+    environment:
+      name: gh-pages-uat
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: test_build
+    steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: github_pages
           path: github_pages
       - run: ls -R github_pages
-   
-
