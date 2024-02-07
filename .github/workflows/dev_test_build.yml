@@ -46,9 +46,10 @@ jobs:
       - name: List Contents of build Directory
         run: ls -R build
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
-          path: 'build'      
+          name: github_pages
+          path: build     
   code_scan:
     needs: test_build
     runs-on: ubuntu-latest
@@ -72,12 +73,13 @@ jobs:
       - name: Checkout Source Codes
         uses: actions/checkout@v4
       - name: Download artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: github_pages
-          path: build 
-      - name: List Contents of build Directory
-        run: ls -R build
+          path: github_pages
+      - run: ls -R github_pages
+      #- name: List Contents of build Directory
+      #  run: ls -R build
       #- name: Deploy to GitHub Pages
       #  id: deployment
       #  uses: actions/deploy-pages@v4
