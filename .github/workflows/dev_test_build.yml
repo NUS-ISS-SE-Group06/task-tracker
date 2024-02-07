@@ -45,15 +45,7 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test
-      
-      
-      #- name: List Contents of build Directory
-      #  run: ls -R build
-      #- name: Upload artifact
-      #  uses: actions/upload-artifact@v4
-      #  with:
-      #    name: github_pages
-      #    path: build
+
 
 
 
@@ -64,15 +56,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: test_build
     steps:
-      #- name: Checkout Source Codes
-      #  uses: actions/checkout@v4
-      #  with: 
-      #    ref: dev
-      #- name: Download artifact
-      #  uses: actions/download-artifact@v4
-      #  with:
-      #    name: github_pages
-      #    path: github_pages
+      - name: Checkout Source Codes
+        uses: actions/checkout@v4
+        with: 
+          ref: dev
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
@@ -87,3 +74,14 @@ jobs:
           token: ${{ secrets.GH_TOKEN }}
           branch: gh-pages-uat
           folder: build
+      - run: echo ${{ steps.deployment.outputs.page_url }}
+
+            
+      
+      #- name: List Contents of build Directory
+      #  run: ls -R build
+      #- name: Upload artifact
+      #  uses: actions/upload-artifact@v4
+      #  with:
+      #    name: github_pages
+      #    path: build
