@@ -83,16 +83,10 @@ jobs:
           branch: gh-pages-uat
           folder: build 
       - name: List Contents of build Directory
-        run: ls -R build
-      - name: Fix permissions
-        run: |
-          chmod -c -R +rX "build" | while read line; do
-            echo "::warning title=Invalid file permissions automatically fixed::$line"
-          done  
+        run: ls -R build  
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:  
-          name: github-pages
           path: build
 
       #- name: Upload artifact
@@ -103,11 +97,11 @@ jobs:
       
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v3
-        with:
-          token: ${{ secrets.GH_TOKEN }}
-          timeout: 300000  # Time to timeout and cancel the deployment (5 minutes)
-      - run: echo ${{ steps.deployment.outputs.page_url }}
+        uses: actions/deploy-pages@v4
+      #  with:
+      #    token: ${{ secrets.GH_TOKEN }}
+      #    timeout: 300000  # Time to timeout and cancel the deployment (5 minutes)
+      #- run: echo ${{ steps.deployment.outputs.page_url }}
 
 
 
