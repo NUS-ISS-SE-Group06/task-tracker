@@ -67,7 +67,7 @@ jobs:
       name: gh-pages-uat
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: code_scan
+    needs: test_build
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
