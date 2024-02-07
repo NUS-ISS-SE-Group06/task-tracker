@@ -85,8 +85,9 @@ jobs:
       - name: List Contents of build Directory
         run: ls -R build
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:  
+          name: github-pages
           path: build
     
       #- name: Upload artifact
@@ -96,7 +97,7 @@ jobs:
       #    path: build
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v3
+        uses: actions/deploy-pages@v4
         with:
            timeout: 300000  # Time to timeout and cancel the deployment (5 minutes)
       - run: echo ${{ steps.deployment.outputs.page_url }}
