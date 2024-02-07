@@ -74,5 +74,6 @@ jobs:
         uses: actions/deploy-pages@v4
         with:
            timeout: 300000  # Time to timeout and cancel the deployment (5 minutes)
+      - run: echo ${{ steps.deployment.outputs.page_url }}
     
         
