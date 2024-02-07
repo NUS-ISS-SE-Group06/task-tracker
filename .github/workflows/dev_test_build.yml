@@ -43,32 +43,40 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test
-      - name: List Contents of build Directory
-        run: ls -R build
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: github_pages
-          path: build
+      #- name: List Contents of build Directory
+      #  run: ls -R build
+      #- name: Upload artifact
+      #  uses: actions/upload-artifact@v4
+      #  with:
+      #    name: github_pages
+      #    path: build
 
 
 
   uat_deploy:
-    environment:
-      name: gh-pages-uat
-      url: ${{ steps.deployment.outputs.page_url }}
+    #environment:
+    #  name: gh-pages-uat
+    #  url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: test_build
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
+      #- name: Download artifact
+      #  uses: actions/download-artifact@v4
+      #  with:
+      #    name: github_pages
+      #    path: github_pages
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
         with:
-          name: github_pages
-          path: github_pages
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm test
       - run: ls -R github_pages
       - name: Deploy to Github Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           token: ${{ secrets.GH_TOKEN }}
           branch: gh-pages-uat
-          folder: ./github_pages
+          folder: build
