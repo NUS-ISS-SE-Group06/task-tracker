@@ -66,3 +66,9 @@ jobs:
           name: github_pages
           path: github_pages
       - run: ls -R github_pages
+      - name: Deploy to Github Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          branch: gh-pages-uat
+          folder: github_pages
