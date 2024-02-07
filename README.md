@@ -10,12 +10,13 @@ Clone Repository
 # Clone Repository
 git clone https://github.com/NUS-ISS-SE-Group06/task-tracker.git
 
-# Install Dependencies NPM module
-### `npm install`
-
 
 ## Available Scripts
 In the project directory, you can run:
+
+### `npm install`
+Install Dependencies NPM module
+
 
 ### `npm start`
 
