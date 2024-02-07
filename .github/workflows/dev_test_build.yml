@@ -46,50 +46,15 @@ jobs:
       - name: List Contents of build Directory
         run: ls -R build
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: github_pages
-          path: build     
-  code_scan:
-    needs: test_build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Source Codes
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Analyze on SonarCloud
-        uses: sonarsource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}         
-  uat_deploy:
-    environment:
-      name: gh-pages-uat
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: test_build
-    steps:
-      - name: Checkout Source Codes
-        uses: actions/checkout@v4
+          path: build
       - name: Download artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: github_pages
           path: github_pages
       - run: ls -R github_pages
-      #- name: List Contents of build Directory
-      #  run: ls -R build
-      #- name: Deploy to GitHub Pages
-      #  id: deployment
-      #  uses: actions/deploy-pages@v4
-      #  with:
-      #     timeout: 300000  # Time to timeout and cancel the deployment (5 minutes)
-      #- run: echo ${{ steps.deployment.outputs.page_url }}
-      - name: Deploy to Github Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          token: ${{ secrets.GH_TOKEN }}
-          branch: gh-pages-uat
-          folder: build
+   
 
