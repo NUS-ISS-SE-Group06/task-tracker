@@ -28,7 +28,7 @@ jobs:
       - run: |
           echo The PR was merged
   reverse_code_merge:
-    if: github.ref == 'refs/heads/dev'  # Skip execution if the branch is main
+    if: github.ref == 'refs/heads/dev'  # execution when code merge : main -> dev
     needs: code_merge
     runs-on: ubuntu-latest
     steps:
