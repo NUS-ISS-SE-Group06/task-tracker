@@ -27,13 +27,13 @@ jobs:
     steps:
       - run: |
           echo The PR was merged
-  reverse_code_merge:
+  branch_synch:
     if: github.ref == 'refs/heads/dev'  # Skip execution if the branch is main
     needs: code_merge
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo The PR was reverse code merged from main -> dev. No further step.
+          echo The PR was branch synchronization code merged from main -> dev. No further step.
   main_build:
     if: github.ref != 'refs/heads/dev'  # Skip execution if the branch is main
     needs: code_merge
