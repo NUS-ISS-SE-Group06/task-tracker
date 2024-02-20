@@ -2,7 +2,7 @@
     width: 100%;
     max-width: 400px; /* Limit the width of the form container */
     margin: 0 auto; /* Center the form horizontally */
-    padding: 20px;
+    padding: 20px 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -10,13 +10,16 @@
   
   .form-group {
     margin-bottom: 20px;
+      padding: 20px 20px 0 0;
   }
   
   label {
     display: block;
     margin-bottom: 5px;
   }
-  
+  .error{
+      color: red;
+  }
   input {
     width: 100%;
     padding: 10px;
@@ -39,4 +42,23 @@
   button:hover {
     background-color: #0056b3;
   }
-  
+  h2{
+      color:#0056b3;
+  }
+  ul{
+      display: inline-flex;
+      list-style-type: none;
+      padding: 10px;
+  }
+  li{
+      display: list-item;
+      padding: 5px;
+  }
+  li a{
+      color: #0056b3;
+      font-size: initial;
+      font-family: ui-sans-serif;
+  }
+  li a:hover{
+      color: blueviolet;
+  }
