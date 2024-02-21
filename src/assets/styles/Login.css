@@ -1,26 +1,60 @@
-.login-container {
-    width: 100%;
-    max-width: 400px; /* Limit the width of the form container */
-    margin: 0 auto; /* Center the form horizontally */
-    padding: 20px 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  .form-group {
+    margin-bottom: 20px;
+    padding: 20px 20px 0 0;
+}
+/* Login.css */
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+ 
+    background-size: 75% auto; /* Cover the entire body */
+    background-position: center; /* Center the background image */
+  }
+
+  .login-container {
+    width: 400px; /* Set a fixed width for the login container */
+    padding: 40px; /* Add padding for content spacing */
+    box-sizing: border-box; /* Ensure padding and border are included in width */
+    background-color: rgba(255, 255, 255, 0.8); /* Set background color for the login form */
+    border-radius: 10px; /* Add border radius for rounded corners */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Add box shadow for depth */
+
+  }
+  
+  .tabs {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .tabs button {
+    padding: 10px 20px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .tabs button.active {
+    background-color: #007bff;
+    color: #fff;
   }
   
   .form-group {
     margin-bottom: 20px;
-      padding: 20px 20px 0 0;
   }
-  
-  label {
-    display: block;
-    margin-bottom: 5px;
-  }
+
   .error{
       color: red;
   }
   input {
+  
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
     width: 100%;
     padding: 10px;
     font-size: 16px;
@@ -28,7 +62,7 @@
     border-radius: 5px;
   }
   
-  button {
+  button[type="submit"] {
     width: 100%;
     padding: 10px;
     font-size: 16px;
@@ -39,7 +73,7 @@
     cursor: pointer;
   }
   
-  button:hover {
+  button[type="submit"]:hover {
     background-color: #0056b3;
   }
   h2{

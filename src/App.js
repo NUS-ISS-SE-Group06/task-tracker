@@ -8,6 +8,7 @@ import ChangePassword from "./auth/ChangePassword";
 function App() {
   return (
 
+
       <BrowserRouter>
           <Routes>
               <Route path="/" element={<Layout />}>
@@ -19,9 +20,10 @@ function App() {
       </BrowserRouter>
 
 
-    // <div className="App">
-    //   <Login/>
-    // </div>
+    <div className="App">
+      <Login/>
+    </div>
+   
   );
 }
 
