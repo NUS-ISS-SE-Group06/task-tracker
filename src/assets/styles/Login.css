@@ -1,3 +1,7 @@
+  .form-group {
+    margin-bottom: 20px;
+    padding: 20px 20px 0 0;
+}
 /* Login.css */
 
 body {
@@ -11,7 +15,7 @@ body {
     background-size: 75% auto; /* Cover the entire body */
     background-position: center; /* Center the background image */
   }
-  
+
   .login-container {
     width: 400px; /* Set a fixed width for the login container */
     padding: 40px; /* Add padding for content spacing */
@@ -19,6 +23,7 @@ body {
     background-color: rgba(255, 255, 255, 0.8); /* Set background color for the login form */
     border-radius: 10px; /* Add border radius for rounded corners */
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Add box shadow for depth */
+
   }
   
   .tabs {
@@ -41,6 +46,11 @@ body {
   .form-group {
     margin-bottom: 20px;
   }
+
+  .error{
+      color: red;
+  }
+  input {
   
   input[type="text"],
   input[type="email"],
@@ -66,4 +76,23 @@ body {
   button[type="submit"]:hover {
     background-color: #0056b3;
   }
-  
+  h2{
+      color:#0056b3;
+  }
+  ul{
+      display: inline-flex;
+      list-style-type: none;
+      padding: 10px;
+  }
+  li{
+      display: list-item;
+      padding: 5px;
+  }
+  li a{
+      color: #0056b3;
+      font-size: initial;
+      font-family: ui-sans-serif;
+  }
+  li a:hover{
+      color: blueviolet;
+  }
