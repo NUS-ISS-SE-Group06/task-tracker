@@ -20,9 +20,7 @@ function App() {
       </BrowserRouter>
 
 
-    <div className="App">
-      <Login/>
-    </div>
+
    
   );
 }
