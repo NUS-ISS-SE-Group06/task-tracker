@@ -19,6 +19,7 @@
     "build": "react-scripts --openssl-legacy-provider build",
     "test": "react-scripts test --openssl-legacy-provider --watchAll --coverage",
     "eject": "react-scripts --openssl-legacy-provider eject"
+
   },
   "eslintConfig": {
     "extends": [
