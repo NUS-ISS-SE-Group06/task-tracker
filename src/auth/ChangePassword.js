@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import BASE_URL from '../components/common/Constants';
 
 const ChangePassword = () => {
     // State to hold the input field values
@@ -43,13 +44,13 @@ const ChangePassword = () => {
     
         try {
             // Make a POST request to your Spring Boot endpoint
-            const response = await fetch('http://localhost:8688/api/change-password', {
+            const response = await fetch(`${BASE_URL}/api/change-password`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    username: "britta",
+                    username: username,
                     oldPassword: current,
                     newPassword: password,
                 }),
