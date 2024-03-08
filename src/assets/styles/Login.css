@@ -94,3 +94,17 @@ body {
   li a:hover{
       color: blueviolet;
   }
+  .response-container p,pre{
+    color: red;
+    font-weight: bold;
+  }
+  .success{
+    color: green;
+    background-color: lightyellow;
+    padding: 8px;
+    margin: 5px;    
+    border: 1px solid;
+    display: inline-block;
+  }
+
+  
