@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { login } from '../services/authService'; // Import the login function from authService
-import '../assets/styles/Login.css'; // Import CSS file for login component styles
+import { useNavigate } from 'react-router-dom';
+import '../assets/styles/Login.css';
+import { login, isFirstLogin } from '../services/authService.js';
 
 const Login = () => {
   const [activeTab, setActiveTab] = useState('login');
@@ -11,16 +12,25 @@ const Login = () => {
   const [signupPassword, setSignupPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleLoginSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      await login(loginUsername, loginPassword); // Call the login function from authService
-      console.log('Login successful');
-      setLoginUsername('');
-      setLoginPassword('');
-      setError('');
+      await login(loginUsername, loginPassword);
+      const isFirst = await isFirstLogin(loginUsername); // Utilize isFirstLogin
+
+      if (isFirst) {
+        sessionStorage.setItem('changePasswordRequired', 'true');
+        navigate('/ChangePassword');
+      } else {
+        console.log('Login successful');
+        setLoginUsername('');
+        setLoginPassword('');
+        setError('');
+        // Redirect to the dashboard or any other page
+      }
     } catch (error) {
       setError(error.message);
     }
