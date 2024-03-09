@@ -1,17 +1,23 @@
-import React, {useState} from 'react';
-const ChangePassword = () => {
+import React, { useState } from 'react';
+import BASE_URL from '../components/common/Constants';
 
+const ChangePassword = () => {
     // State to hold the input field values
     const [current, setCurrentPassword] = useState('');
     const [password, setNewPassword] = useState('');
     const [verify, setVerifyPassword] = useState('');
+    const [username, setUsername] = useState('');
     const [errors, setErrors] = useState({});
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    const [response,setResponse] = useState(null);
 
+    const handleSubmit =  async(event) => {
+        event.preventDefault();
+   
         // Validation checks
         const validationErrors = {};
-
+        if(!username){
+            validationErrors.username = 'Username is required';
+        }
         if (!current) {
             validationErrors.current = 'Current password is required';
         }
@@ -32,24 +38,60 @@ const ChangePassword = () => {
 
         // If there are validation errors, update the state and stop submission
         if (Object.keys(validationErrors).length > 0) {
-            setErrors(validationErrors);
+            setErrors(validationErrors); // Update the state with validation errors
             return;
         }
-
-        // Here you can perform validation and password logic
-        console.log('Change password:', { current, password,verify });
-        // Clear form fields after submission
-
-        setCurrentPassword('');
-        setNewPassword('');
-        setVerifyPassword('');
-        setErrors({});
+    
+        try {
+            // Make a POST request to your Spring Boot endpoint
+            const response = await fetch(`${BASE_URL}/api/change-password`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    oldPassword: current,
+                    newPassword: password,
+                }),
+            });
+    
+            const data = await response.json();
+    
+            // Update the response state based on the server response
+            setResponse({
+                timestamp: data.timestamp,
+                status: response.status,
+                error: data.error,
+                message: data.message,
+                body: data.body,
+            });
+    
+            // Clear form fields after submission
+            setCurrentPassword('');
+            setNewPassword('');
+            setVerifyPassword('');
+            setErrors({});
+        } catch (error) {
+            console.error('Error:', error.message);
+        }
     };
 
     return (
         <div className="login-container">
             <h2>Change Password</h2>
+            {response && response.message !=="Failed" &&(<span className='success'>{response.message}</span>)}
             <form onSubmit={handleSubmit}>
+            <div className="form-group">
+                    <label htmlFor="username">Username:</label>
+                    <input
+                        type="text"
+                        id="username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
+                    {errors.username && <span className="error">{errors.username}</span>}
+                </div>
                 <div className="form-group">
                     <label htmlFor="current">Current Password:</label>
                     <input
@@ -63,7 +105,7 @@ const ChangePassword = () => {
                 <div className="form-group">
                     <label htmlFor="password">New Password:</label>
                     <input
-                        type="text"
+                        type="password"
                         id="password"
                         value={password}
                         onChange={(e) => setNewPassword(e.target.value)}
@@ -82,8 +124,15 @@ const ChangePassword = () => {
                 </div>
                 <button type="submit">Submit</button>
             </form>
-        </div>
 
-    )
-}
+            {response && response.error !== "" &&(
+                <div  className="response-container">
+                    <p>Error:</p>
+                    <pre> {response.body}</pre>
+                </div>
+            )}
+        </div>
+    );
+};
+
 export default ChangePassword;
