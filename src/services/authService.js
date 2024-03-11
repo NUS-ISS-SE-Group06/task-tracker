@@ -1,23 +1,26 @@
-// authService.js
+// auth/loginApi.js
 
-// Mock user data for authentication
-const users = [
-    { username: 'user1', password: 'password1' },
-    { username: 'user2', password: 'password2' },
-    // Add more mock users as needed
-  ];
-  
-  export async function login(username, password) {
-    // Simulate an asynchronous operation with setTimeout
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const user = users.find(user => user.username === username && user.password === password);
-        if (user) {
-          resolve({ username: user.username }); // Mock user object
-        } else {
-          reject(new Error('Invalid username or password'));
-        }
-      }, 1000); // Simulate 1 second delay
+const BASE_URL = 'http://localhost:8688/api/userinfo'; // Replace with your actual API base URL
+
+const login = async (Username, Password) => {
+  try {
+    const response = await fetch(`${BASE_URL}/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ Username, Password }),
     });
+
+    if (!response.ok) {
+      throw new Error('Login failed');
+    }
+
+    const data = await response.json();
+    return data; // Assuming your API returns some data upon successful login
+  } catch (error) {
+    console.error('Error logging in:', error);
+    throw error;
   }
-  
+};
+export { login }; 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { login } from '../services/authService'; // Import the login function from authService
 import '../assets/styles/Login.css'; // Import CSS file for login component styles
 
-const Login = () => {
+const Login = (onLogin) => {
   const [activeTab, setActiveTab] = useState('login');
   const [loginUsername, setLoginUsername] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
@@ -16,13 +16,17 @@ const Login = () => {
     event.preventDefault();
 
     try {
-      await login(loginUsername, loginPassword); // Call the login function from authService
-      console.log('Login successful');
-      setLoginUsername('');
-      setLoginPassword('');
-      setError('');
+      const data = await login(loginUsername, loginPassword);
+      // Handle successful login (e.g., store user data, update state, etc.)
+      console.log('Login successful:', data);
+      // Optionally, call a callback function passed via props to notify parent component of successful login
+      if (typeof onLogin === 'function') {
+        onLogin(data); // Call the onLogin function with the user data
+      }
     } catch (error) {
-      setError(error.message);
+      // Handle login error
+      console.error('Login failed:', error.message);
+      // Optionally, display an error message to the user
     }
   };
 
