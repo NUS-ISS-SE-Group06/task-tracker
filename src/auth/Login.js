@@ -25,6 +25,7 @@ const Login = (onLogin) => {
       }
     } catch (error) {
       // Handle login error
+      setError(error.message);
       console.error('Login failed:', error.message);
       // Optionally, display an error message to the user
     }
@@ -71,6 +72,11 @@ const Login = (onLogin) => {
             />
           </div>
           <button type="submit">Login</button>
+        
+             
+              <pre>{error.message && error.message !== '' &&    <p className='error'>{error.message}</p>}</pre>
+          
+         
         </form>
       )}
       {activeTab === 'signup' && (
@@ -108,7 +114,9 @@ const Login = (onLogin) => {
             />
           </div>
           <button type="submit">Sign Up</button>
+          
         </form>
+  
       )}
     </div>
   );
