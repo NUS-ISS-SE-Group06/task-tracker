@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { login } from '../services/authService'; // Import the login function from authService
-import {setCookie,clearCookie} from '../services/cookieService';
+import {setCookie} from '../services/cookieService';
 import '../assets/styles/Login.css'; // Import CSS file for login component styles
 
 import { useNavigate } from "react-router-dom";
@@ -30,11 +30,7 @@ const Login = (onLogin) => {
    
       const userRole = data.body.userRole;
   
-      // Set cookie with user role
-      console.log(userRole)
-      
       setCookie('userRole',userRole,1);
-      console.log( setCookie(userRole))
       navigate('/dashboard', {  state: { role: userRole } });
    
     } catch (error) {
