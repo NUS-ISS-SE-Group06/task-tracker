@@ -1,13 +1,17 @@
-import { Outlet, Link, useRoutes } from "react-router-dom";
+import { Outlet, Link, useRoutes,useLocation } from "react-router-dom";
 import React, { useState } from 'react';
 import '../../assets/styles/Style.css';
-const Dashboard = () => {
-    const [role, setRole]= useState('user')
-    
+import {getCookieValue} from '../../services/cookieService';
+
+const Dashboard = ({}) => {
+
+    const location = useLocation();
+    const role = location.state && location.state.role;
+    console.log(getCookieValue(role))
     return (
         <>
              <nav className="nav-container">
-                {role ==='admin' && (
+                {role ==='ROLE_ADMIN' && (
                     <ul>
                         <li>
                             <Link to="/usermanagement">User Management</Link>
@@ -27,7 +31,7 @@ const Dashboard = () => {
                     </ul>    
                 )}
                 
-                {role ==='user' && (
+                {role ==='ROLE_USER' && (
                     <ul>
                         <li>
                             <Link to="/tasklist">Task List</Link>

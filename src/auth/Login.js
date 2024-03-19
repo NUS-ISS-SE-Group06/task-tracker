@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { login } from '../services/authService'; // Import the login function from authService
+import {setCookie,clearCookie} from '../services/cookieService';
 import '../assets/styles/Login.css'; // Import CSS file for login component styles
 
+import { useNavigate } from "react-router-dom";
 const Login = (onLogin) => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('login');
   const [loginUsername, setLoginUsername] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
@@ -18,24 +21,36 @@ const Login = (onLogin) => {
     try {
       const data = await login(loginUsername, loginPassword);
       // Handle successful login (e.g., store user data, update state, etc.)
-      console.log('Login successful:', data);
+      
       // Optionally, call a callback function passed via props to notify parent component of successful login
       if (typeof onLogin === 'function') {
         onLogin(data); // Call the onLogin function with the user data
       }
+      console.log('Login successful:', data);
+   
+      const userRole = data.body.userRole;
+  
+      // Set cookie with user role
+      console.log(userRole)
+      
+      setCookie('userRole',userRole,1);
+      console.log( setCookie(userRole))
+      navigate('/dashboard', {  state: { role: userRole } });
+   
     } catch (error) {
       // Handle login error
       setError(error.message);
       console.error('Login failed:', error.message);
       // Optionally, display an error message to the user
     }
+     
   };
 
   const handleSignupSubmit = async (event) => {
     event.preventDefault();
     // Handle signup logic here
   };
-
+ 
   return (
     <div className="login-container">
       <div className="tabs">
