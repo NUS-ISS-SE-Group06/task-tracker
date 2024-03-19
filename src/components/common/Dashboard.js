@@ -1,13 +1,17 @@
-import { Outlet, Link, useRoutes,useLocation } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 import React, { useState } from 'react';
 import '../../assets/styles/Style.css';
 import {getCookieValue} from '../../services/cookieService';
-
+import { handleLogout } from '../../services/authService'; 
 const Dashboard = ({}) => {
 
-    const location = useLocation();
-    const role = location.state && location.state.role;
-    console.log(getCookieValue(role))
+    const role = getCookieValue('userRole')
+    if(!role){
+        handleLogout();
+    }
+   
+     
+
     return (
         <>
              <nav className="nav-container">
@@ -28,6 +32,9 @@ const Dashboard = ({}) => {
                         <li>
                             <Link to="/auditinfo">Task Audit List</Link>
                         </li>
+                        <li>
+                            <Link onClick={handleLogout} to="/logout">Logout</Link>
+                        </li>
                     </ul>    
                 )}
                 
@@ -39,11 +46,14 @@ const Dashboard = ({}) => {
                         <li>
                             <Link to="/leaderboard">LeaderBoard</Link>
                         </li>
+                        <li>
+                            <Link onClick={handleLogout}>Logout</Link>
+                        </li>
                     </ul>    
                 )}
                 
             </nav>
-
+  
             <Outlet />
         </>
     )

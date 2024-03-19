@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import BASE_URL from '../components/common/Constants';
+import {BASE_URL} from '../components/common/Constants';
 
 const ChangePassword = () => {
     // State to hold the input field values

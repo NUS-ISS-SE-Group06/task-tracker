@@ -1,8 +1,8 @@
 // auth/loginApi.js
-import BASE_URL from '../components/common/Constants';
+import { BASE_URL, HOME_URL } from '../components/common/Constants';
 //const BASE_URL = 'http://localhost:8688/api/userinfo'; // Replace with your actual API base URL
-
-const login = async (username, password) => {
+import {clearCookie} from './cookieService';
+export const login = async (username, password) => {
   try {
     const response = await fetch(`${BASE_URL}/userinfo/login`, {
       method: 'POST',
@@ -25,4 +25,13 @@ const login = async (username, password) => {
     throw error;
   }
 };
-export { login }; 
+export const handleLogout = () => {
+  console.log('Hi')
+ // const handleLogout = () => {
+    // Clear cookies or tokens upon logout
+    clearCookie('userRole'); // Example: Clear user role cookie
+
+    // Redirect to login page after logout
+    window.location.href = HOME_URL; // Redirect to login page
+  //}
+};
