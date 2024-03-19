@@ -107,4 +107,6 @@ body {
     display: inline-block;
   }
 
-  
+  .login-container p{
+    color: red;
+  }
