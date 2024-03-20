@@ -1,9 +1,9 @@
 import { Outlet, Link } from "react-router-dom";
-import React, { useState } from 'react';
+import React from 'react';
 import '../../assets/styles/Style.css';
 import {getCookieValue} from '../../services/cookieService';
 import { handleLogout } from '../../services/authService'; 
-const Dashboard = ({}) => {
+const Dashboard = () => {
 
     const role = getCookieValue('userRole')
     if(!role){
