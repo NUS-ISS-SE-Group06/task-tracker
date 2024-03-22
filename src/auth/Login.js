@@ -1,19 +1,22 @@
 import React, { useState } from 'react';
-import { login } from '../services/authService'; // Import the login function from authService
+import { login, signUp } from '../services/authService'; // Import the login function from authService
 import {setCookie} from '../services/cookieService';
 import '../assets/styles/Login.css'; // Import CSS file for login component styles
 
 import { useNavigate } from "react-router-dom";
 const Login = (onLogin) => {
+  
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('login');
   const [loginUsername, setLoginUsername] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [signupUsername, setSignupUsername] = useState('');
+  const [signupName, setSignupName] = useState('');
   const [signupEmail, setSignupEmail] = useState('');
   const [signupPassword, setSignupPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const handleLoginSubmit = async (event) => {
     event.preventDefault();
@@ -44,7 +47,50 @@ const Login = (onLogin) => {
 
   const handleSignupSubmit = async (event) => {
     event.preventDefault();
-    // Handle signup logic here
+    setError(``);
+
+    if (signupName.length <= 2) {
+      setError(`Invalid Name`);
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (signupEmail.length <= 2 || !emailRegex.test(signupEmail)) {
+      setError(`Invalid Email Address`);
+      return;
+    }
+
+    if (signupUsername.length <= 2) {
+      setError(`Invalid Username`);
+      return;
+    } 
+
+    const passwordRegex = /.*[a-zA-Z].*\d.*/; 
+    if (signupPassword.length < 8  || signupPassword !== confirmPassword || !passwordRegex.test(signupPassword)) {
+      setError(`Invalid Password.\n\n
+      Password must be at least 8 characters long
+      and contain a combination of letters, numbers, and special characters.`);
+      return;
+    }
+  
+
+  
+    try {
+      const data = await signUp(signupName,signupEmail,signupUsername,signupPassword);
+      setSuccess(`Admin Registration successfully completed. please login using your credentials to create your group`);
+      setCookie('userRole','')
+      setActiveTab('login');
+      console.log('debug:', data);
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        setError("Apologies. We are currently encountering issues at our end. Please attempt User Registration later.");
+      } else {
+        setError(error.message);
+        console.error('Login failed:', error.message);
+      }
+
+    }
+
   };
  
   return (
@@ -63,7 +109,8 @@ const Login = (onLogin) => {
           Sign Up
         </button>
       </div>
-      {error && <p>{error}</p>}
+      {error && <p className='error-message'>{error}</p>}
+      {success && <p className='success-message'>{success}</p>}
       {activeTab === 'login' && (
         <form onSubmit={handleLoginSubmit}>
           <div className="form-group">
@@ -95,9 +142,9 @@ const Login = (onLogin) => {
           <div className="form-group">
             <input
               type="text"
-              placeholder="Username"
-              value={signupUsername}
-              onChange={(e) => setSignupUsername(e.target.value)}
+              placeholder="Name"
+              value={signupName}
+              onChange={(e) => setSignupName(e.target.value)}
             />
           </div>
           <div className="form-group">
@@ -106,6 +153,14 @@ const Login = (onLogin) => {
               placeholder="Email Address"
               value={signupEmail}
               onChange={(e) => setSignupEmail(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <input
+              type="text"
+              placeholder="Username"
+              value={signupUsername}
+              onChange={(e) => setSignupUsername(e.target.value)}
             />
           </div>
           <div className="form-group">

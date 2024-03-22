@@ -107,6 +107,10 @@ body {
     display: inline-block;
   }
 
-  .login-container p{
+  .login-container .success-message{
+    color:darkgreen;
+  }
+
+  .login-container .error-message{
     color: red;
   }

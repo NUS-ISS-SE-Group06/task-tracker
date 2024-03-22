@@ -35,3 +35,27 @@ export const handleLogout = () => {
     window.location.href = HOME_URL; // Redirect to login page
   //}
 };
+
+export const signUp = async (name, email, username, password) => {
+  try {
+    const response = await fetch(`${BASE_URL}/signup`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name, email, username, password }),
+    });
+    const data = await response.json();
+   
+    if (data.error !== "") {
+      throw new Error(data.error);
+    }
+
+    return data; 
+
+  } catch (error) {
+  
+    console.error('Error SigningUp in:', error);
+    throw error;
+  }
+};
