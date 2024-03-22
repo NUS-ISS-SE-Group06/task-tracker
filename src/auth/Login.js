@@ -27,20 +27,23 @@ const Login = (onLogin) => {
       
       // Optionally, call a callback function passed via props to notify parent component of successful login
       if (typeof onLogin === 'function') {
-        onLogin(data); // Call the onLogin function with the user data
+       onLogin(data); // Call the onLogin function with the user data
       }
-      console.log('Login successful:', data);
    
       const userRole = data.body.userRole;
   
+      console.error('Login failed:', error.message);
+      
       setCookie('userRole',userRole,1);
       navigate('/dashboard', {  state: { role: userRole } });
    
     } catch (error) {
-      // Handle login error
-      setError(error.message);
-      console.error('Login failed:', error.message);
-      // Optionally, display an error message to the user
+      if (error.response && error.response.status === 404) {
+        setError("Apologies. We are currently encountering issues at our end. Please attempt Login later.");
+      } else {
+        setError(error.message);
+        console.error('Login failed:', error.message);
+      }
     }
      
   };
