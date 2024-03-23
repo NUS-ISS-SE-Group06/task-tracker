@@ -24,7 +24,7 @@ const Dashboard = () => {
                             <Link to="/taskmanagement">Task Management</Link>
                         </li>
                         <li>
-                            <Link to="/auditinfo">Task Audit List</Link>
+                            <Link to="/leaderboard">LeaderBoard</Link>
                         </li>
                         <li>
                             <Link onClick={handleLogout} to="/logout">Logout</Link>
