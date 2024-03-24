@@ -10,15 +10,13 @@ const Dashboard = () => {
         handleLogout();
     }
    
-     
-
     return (
         <>
              <nav className="nav-container">
                 {role ==='ROLE_ADMIN' && (
                     <ul>
                         <li>
-                            <Link to="/usermanagement">User Management</Link>
+                            <Link to="/userregistration">User Registration</Link>
                         </li>
                         <li>
                             <Link to="/taskmanagement">Task Management</Link>

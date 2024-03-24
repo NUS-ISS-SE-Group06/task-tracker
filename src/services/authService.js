@@ -30,18 +30,26 @@ export const handleLogout = () => {
  // const handleLogout = () => {
     // Clear cookies or tokens upon logout
     clearCookie('userRole'); // Example: Clear user role cookie
+    clearCookie('authToken'); // Example: Clear auth token cookie
 
     // Redirect to login page after logout
     window.location.href = HOME_URL; // Redirect to login page
   //}
 };
 
-export const signUp = async (name, email, groupName, userRole, username, password) => {
+export const signUp = async (name, email, groupName, userRole, username, password, authToken) => {
   try {
+    if (authToken === undefined){
+      authToken = '';
+    } else{
+      authToken = 'Bearer '+authToken;
+    }
+
     const response = await fetch(`${BASE_URL}/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': authToken
       },
       body: JSON.stringify({ name, email, groupName, userRole, username, password }),
     });
