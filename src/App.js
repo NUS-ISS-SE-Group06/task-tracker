@@ -5,13 +5,11 @@ import  Login from './auth/Login';
 import Layout from './components/common/Layout'
 import ChangePassword from "./auth/ChangePassword";
 import Dashboard from './components/common/Dashboard';
+import UserRegistration from './userreg/UserRegistration';
 
 function App() {
 
-    
   return (
-
-
       <BrowserRouter>
           <Routes>
               <Route path="/" element={<Layout />}>
@@ -20,13 +18,13 @@ function App() {
               </Route>
               <Route path="/dashboard" element={<Dashboard />}>
               </Route>
+              <Route path="/userregistration" element={<UserRegistration />}>
+              </Route>
           </Routes>
       </BrowserRouter>
 
-
-
-   
   );
+
 }
 
 export default App;

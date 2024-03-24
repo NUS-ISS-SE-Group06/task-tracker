@@ -32,10 +32,13 @@ const Login = (onLogin) => {
       }
    
       const userRole = data.body.userRole;
+      const authToken = data.body.authToken;
   
       console.error('Login failed:', error.message);
       
       setCookie('userRole',userRole,1);
+      setCookie('authToken',authToken,1);
+
       navigate('/dashboard', {  state: { role: userRole } });
    
     } catch (error) {
@@ -88,7 +91,7 @@ const Login = (onLogin) => {
     try {
       const userRole = "ROLE_ADMIN";
       const data = await signUp(signupName,signupEmail,signupGroupName,userRole, signupUsername,signupPassword);
-      setSuccess(`Admin Registration successfully completed. please login using your credentials to create your group`);
+      setSuccess(`Admin Registration successfully completed. please login using your credentials to work in your group`);
       setCookie('userRole','')
       setActiveTab('login');
       console.log('debug:', data);
