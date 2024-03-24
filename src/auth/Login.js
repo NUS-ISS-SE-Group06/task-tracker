@@ -15,6 +15,7 @@ const Login = (onLogin) => {
   const [signupEmail, setSignupEmail] = useState('');
   const [signupPassword, setSignupPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [signupGroupName, setSignupGroupName] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
@@ -63,6 +64,14 @@ const Login = (onLogin) => {
       return;
     }
 
+    const groupNameRegex = /^(?! )[0-9A-Za-z](?!.* $)[0-9A-Za-z\s]{0,18}(?<! )$/;
+    if (signupGroupName.length <=5 || !groupNameRegex.test(signupGroupName)) {
+        setError(`Invalid Group Name.\n\n
+        Group Name must be at least 6 characters long
+        and contain a combination of letters, numbers, and space.`);
+        return;
+    } 
+  
     if (signupUsername.length <= 2) {
       setError(`Invalid Username`);
       return;
@@ -76,10 +85,9 @@ const Login = (onLogin) => {
       return;
     }
   
-
-  
     try {
-      const data = await signUp(signupName,signupEmail,signupUsername,signupPassword);
+      const userRole = "ROLE_ADMIN";
+      const data = await signUp(signupName,signupEmail,signupGroupName,userRole, signupUsername,signupPassword);
       setSuccess(`Admin Registration successfully completed. please login using your credentials to create your group`);
       setCookie('userRole','')
       setActiveTab('login');
@@ -161,6 +169,14 @@ const Login = (onLogin) => {
           <div className="form-group">
             <input
               type="text"
+              placeholder="Group Name"
+              value={signupGroupName}
+              onChange={(e) => setSignupGroupName(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <input
+              type="text"
               placeholder="Username"
               value={signupUsername}
               onChange={(e) => setSignupUsername(e.target.value)}
@@ -182,6 +198,7 @@ const Login = (onLogin) => {
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </div>
+
           <button type="submit">Sign Up</button>
           
         </form>

@@ -36,14 +36,14 @@ export const handleLogout = () => {
   //}
 };
 
-export const signUp = async (name, email, username, password) => {
+export const signUp = async (name, email, groupName, userRole, username, password) => {
   try {
     const response = await fetch(`${BASE_URL}/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ name, email, username, password }),
+      body: JSON.stringify({ name, email, groupName, userRole, username, password }),
     });
     const data = await response.json();
    
