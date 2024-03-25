@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
+import { Outlet, Link } from "react-router-dom";
 
 import { signUp } from '../services/authService'; // Import the login function from authService
 import {getCookieValue} from '../services/cookieService';
+import { handleLogout } from '../services/authService';
 
-import '../assets/styles/Login.css'; // Import CSS file for login component styles
-import '../App.css';
+import '../assets/styles/Dashboard.css'; // Import CSS file for login component stylesß
+import '../assets/styles/Style.css';
 
 
 const UserRegistration = (onUserRegistration) => {
+
+  const role = getCookieValue('userRole');
+    if (!role) {
+        handleLogout();
+    }
 
   const [signupUsername, setSignupUsername] = useState('');
   const [signupName, setSignupName] = useState('');
@@ -64,7 +71,10 @@ const UserRegistration = (onUserRegistration) => {
   };
  
   return (
-    <div className="login-container">
+    <>
+    
+            <Outlet />
+    <div className="dashboard">
       {error && <p className='error-message'>{error}</p>}
       {success && <p className='success-message'>{success}</p>}
       
@@ -114,9 +124,47 @@ const UserRegistration = (onUserRegistration) => {
           <button type="submit">Create User</button>
           
         </form>
-  
+        
       }
-    </div>
+      <Outlet />
+      </div>
+       <nav className="nav">
+                      {role === 'ROLE_ADMIN' && (
+                          <ul>
+                              <li>
+                                  <Link to="/userregistration">User Registration</Link>
+                              </li>
+                              <li>
+                                  <Link to="/dashboard">Dashboard</Link>
+                              </li>
+                              <li>
+                                  <Link to="/leaderboard">LeaderBoard</Link>
+                              </li>
+                              <li>
+                                  <Link onClick={handleLogout} to="/logout">Logout</Link>
+                              </li>
+                          </ul>
+                      )}
+
+                      {role === 'ROLE_USER' && (
+                          <ul>
+                              <li>
+                                  <Link to="/tasklist">Task List</Link>
+                              </li>
+                              <li>
+                                  <Link to="/leaderboard">LeaderBoard</Link>
+                              </li>
+                              <li>
+                                  <Link onClick={handleLogout}>Logout</Link>
+                              </li>
+                          </ul>
+                      )}
+
+                  </nav>
+
+                  <Outlet />
+    
+    </>
   );
 };
 

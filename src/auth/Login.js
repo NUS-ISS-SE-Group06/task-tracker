@@ -4,6 +4,8 @@ import {setCookie} from '../services/cookieService';
 import '../assets/styles/Login.css'; // Import CSS file for login component styles
 
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+
 const Login = (onLogin) => {
   
   const navigate = useNavigate();
@@ -31,11 +33,11 @@ const Login = (onLogin) => {
        onLogin(data); // Call the onLogin function with the user data
       }
    
-      const userRole = data.body.userRole;
-      const authToken = data.body.authToken;
-  
-      console.error('Login failed:', error.message);
       
+      const authToken = data.body.authToken;
+      const decoded = jwtDecode(authToken);
+      const userRole = decoded.auth;
+  
       setCookie('userRole',userRole,1);
       setCookie('authToken',authToken,1);
 
