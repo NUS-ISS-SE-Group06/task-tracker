@@ -1,0 +1,78 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-size: 75% auto;
+    background-position: center;
+    margin-bottom: 10px;
+}
+
+.header, .dashboard, .nav {
+    width: 1200px;
+    padding: 40px;
+    box-sizing: border-box;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+.header, .dashboard{
+  
+    margin-bottom: 230px;
+}
+
+.header {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+}
+
+.dashboard {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+}
+
+
+.nav {
+    flex: 0.1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    
+}
+table {
+    width: 100%; /* Full width */
+    table-layout: auto; /* Allow the browser to adjust the column width */
+    
+}
+th, td {
+    text-align: left; /* Align text to the left */
+}
+.nav a, th {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0 10px;
+}
+
+td {
+    font-size: 20px;
+    margin: 0 10px;
+}
+
+@media (max-width: 1200px) {
+    .nav {
+        flex-direction: column;
+    }
+}
