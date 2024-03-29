@@ -37,7 +37,7 @@ export const handleLogout = () => {
   //}
 };
 
-export const signUp = async (name, email, groupName, userRole, username, password, authToken) => {
+export const signUp = async (name, email, groupName, userRole, username, authToken) => {
   try {
     if (authToken === undefined){
       authToken = '';
@@ -51,7 +51,7 @@ export const signUp = async (name, email, groupName, userRole, username, passwor
         'Content-Type': 'application/json',
         'Authorization': authToken
       },
-      body: JSON.stringify({ name, email, groupName, userRole, username, password }),
+      body: JSON.stringify({ name, email, groupName, userRole, username }),
     });
     const data = await response.json();
    

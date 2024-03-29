@@ -19,8 +19,7 @@ const UserRegistration = (onUserRegistration) => {
   const [signupUsername, setSignupUsername] = useState('');
   const [signupName, setSignupName] = useState('');
   const [signupEmail, setSignupEmail] = useState('');
-  const [signupPassword, setSignupPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [userRole, setUserRole] = useState('USER_ROLE');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
@@ -44,18 +43,9 @@ const UserRegistration = (onUserRegistration) => {
       return;
     } 
 
-    const passwordRegex = /.*[a-zA-Z].*\d.*/; 
-    if (signupPassword.length < 8  || signupPassword !== confirmPassword || !passwordRegex.test(signupPassword)) {
-      setError(`Invalid Password.\n\n
-      Password must be at least 8 characters long
-      and contain a combination of letters, numbers, and special characters.`);
-      return;
-    }
-  
     try {
-      const userRole = "ROLE_USER";
       const authToken = getCookieValue('authToken')
-      const data = await signUp(signupName,signupEmail,'',userRole, signupUsername,signupPassword, authToken);
+      const data = await signUp(signupName,signupEmail,'',userRole, signupUsername, authToken);
       setSuccess(`User Registration successfully completed. please ask user to login using credentials provided`);
       console.log('debug:', data);
     } catch (error) {
@@ -65,7 +55,6 @@ const UserRegistration = (onUserRegistration) => {
         setError(error.message);
         console.error('Login failed:', error.message);
       }
-
     }
 
   };
@@ -97,27 +86,17 @@ const UserRegistration = (onUserRegistration) => {
             />
           </div>
           <div className="form-group">
+            <select value={userRole} onChange={(e) => setUserRole(e.target.value)}>
+              <option value="ROLE_USER">User</option>
+              <option value="ROLE_ADMIN">Admin</option>
+            </select>
+          </div>
+          <div className="form-group">
             <input
               type="text"
               placeholder="Username"
               value={signupUsername}
               onChange={(e) => setSignupUsername(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="password"
-              placeholder="Password"
-              value={signupPassword}
-              onChange={(e) => setSignupPassword(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </div>
 
