@@ -48,6 +48,10 @@ const UserRegistration = (onUserRegistration) => {
       const data = await signUp(signupName,signupEmail,'',userRole, signupUsername, authToken);
       setSuccess(`User Registration successfully completed. please ask user to login using credentials provided`);
       console.log('debug:', data);
+      setSignupUsername('');
+      setSignupName('');
+      setSignupEmail('');
+      setUserRole('ROLE_USER');
     } catch (error) {
       if (error.response && error.response.status === 404) {
         setError("Apologies. We are currently encountering issues at our end. Please attempt User Registration later.");
