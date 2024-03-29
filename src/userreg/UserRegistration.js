@@ -19,7 +19,7 @@ const UserRegistration = (onUserRegistration) => {
   const [signupUsername, setSignupUsername] = useState('');
   const [signupName, setSignupName] = useState('');
   const [signupEmail, setSignupEmail] = useState('');
-  const [userRole, setUserRole] = useState('USER_ROLE');
+  const [userRole, setUserRole] = useState('ROLE_USER');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
@@ -45,14 +45,16 @@ const UserRegistration = (onUserRegistration) => {
 
     try {
       const authToken = getCookieValue('authToken')
-      const data = await signUp(signupName,signupEmail,'',userRole, signupUsername, authToken);
-      setSuccess(`User Registration successfully completed. please ask user to login using credentials provided`);
+      const data = await signUp(signupName,signupEmail,'',userRole, signupUsername, '', authToken);
+      setSuccess(`User Registration successfully completed. please ask user to login using Default credentials`);
+      setError('');
       console.log('debug:', data);
       setSignupUsername('');
       setSignupName('');
       setSignupEmail('');
       setUserRole('ROLE_USER');
     } catch (error) {
+      setSuccess('');
       if (error.response && error.response.status === 404) {
         setError("Apologies. We are currently encountering issues at our end. Please attempt User Registration later.");
       } else {
