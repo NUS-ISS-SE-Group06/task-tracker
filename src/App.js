@@ -5,6 +5,7 @@ import  Login from './auth/Login';
 import Layout from './components/common/Layout'
 import ChangePassword from "./auth/ChangePassword";
 import Dashboard from './components/common/Dashboard';
+
 import UserRegistration from './userreg/UserRegistration';
 
 function App() {
