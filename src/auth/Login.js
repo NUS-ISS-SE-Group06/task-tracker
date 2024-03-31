@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { login, signUp } from '../services/authService'; // Import the login function from authService
 import {setCookie} from '../services/cookieService';
 import '../assets/styles/Login.css'; // Import CSS file for login component styles
+import { useNavigate } from 'react-router-dom'; // Import useNavigate hook from react-router-dom
 
-import { useNavigate } from "react-router-dom";
+
 import { jwtDecode } from "jwt-decode";
 
 const Login = (onLogin) => {
@@ -27,7 +28,16 @@ const Login = (onLogin) => {
     try {
       const data = await login(loginUsername, loginPassword);
       // Handle successful login (e.g., store user data, update state, etc.)
-      
+      //console.log(data);//debug
+
+       if (data.body.passwordChangeMandatory==='TRUE') { // Check if password change is mandatory
+              navigate('/ChangePassword'); // Redirect to change password route using navigate function
+              return; // Stop further execution
+        }
+
+        // Handle successful login (e.g., store user data, update state, etc.)
+        console.log('Login successful:', data);
+
       // Optionally, call a callback function passed via props to notify parent component of successful login
       if (typeof onLogin === 'function') {
        onLogin(data); // Call the onLogin function with the user data
