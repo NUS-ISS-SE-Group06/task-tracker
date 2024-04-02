@@ -113,41 +113,7 @@ const UserRegistration = (onUserRegistration) => {
       }
       <Outlet />
       </div>
-       <nav className="nav">
-                      {role === 'ROLE_ADMIN' && (
-                          <ul>
-                              <li>
-                                  <Link to="/userregistration">User Registration</Link>
-                              </li>
-                              <li>
-                                  <Link to="/dashboard">Dashboard</Link>
-                              </li>
-                              <li>
-                                  <Link to="/leaderboard">LeaderBoard</Link>
-                              </li>
-                              <li>
-                                  <Link onClick={handleLogout} to="/logout">Logout</Link>
-                              </li>
-                          </ul>
-                      )}
-
-                      {role === 'ROLE_USER' && (
-                          <ul>
-                              <li>
-                                  <Link to="/tasklist">Task List</Link>
-                              </li>
-                              <li>
-                                  <Link to="/leaderboard">LeaderBoard</Link>
-                              </li>
-                              <li>
-                                  <Link onClick={handleLogout}>Logout</Link>
-                              </li>
-                          </ul>
-                      )}
-
-                  </nav>
-
-                  <Outlet />
+      
     
     </>
   );
