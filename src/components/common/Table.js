@@ -16,24 +16,24 @@ export const Table = ({ rows, deleteRow, editRow }) => {
                         <th>Task Assignment Date</th>
                         <th>Task Assignee</th>
                         <th>Task Due Date</th>
-                        <th>Status</th>
+                        <th>Task Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {rows.map((row, idx) => {
                         const statusText =
-                            row.status.charAt(0).toUpperCase() + row.status.slice(1);
+                            row.taskStatus.charAt(0).toUpperCase() + row.taskStatus.slice(1);
 
                         return (
                             <tr key={idx}>
                                 <td>{row.taskName}</td>
-                                <td className="expand">{row.taskCreationDate}</td>
-                                <td>{row.taskAssignmentDate}</td>
+                                <td className="expand">{row.createdDate}</td>
+                                <td>{row.modifiedDate}</td>
                                 <td>{row.taskAssignee}</td>
                                 <td>{row.taskDueDate}</td>
                                 <td>
-                                    <span className={`label label-${row.status}`}>
+                                    <span className={`label label-${row.taskStatus}`}>
                                         {statusText}
                                     </span>
                                 </td>
