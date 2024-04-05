@@ -1,6 +1,6 @@
 import { Outlet, Link } from "react-router-dom";
 import React from 'react';
-import { useState } from "react";
+import { useEffect,useState } from "react";
 import '../../assets/styles/Style.css';
 import { getCookieValue } from '../../services/cookieService';
 import { handleLogout } from '../../services/authService';
@@ -10,33 +10,26 @@ import { Modal } from "./Modal";
 import { UserManagementTbl } from "./UserManagementTbl";
 import { UserModal } from "./UserModal";
 import UserRegistration from '../../userreg/UserRegistration';
-const Dashboard = () => {
+import { fetchTaskList,deleteTask } from "../../services/taskService";
 
+const Dashboard = () => {
+    const accessToken = getCookieValue('authToken');
     const [modalOpen, setModalOpen] = useState(false);
     const [rows, setRows] = useState([
-        { "taskName": "Task 9", "taskCreationDate": "25/03/2024 ", "taskAssignmentDate": "27/03/2024", "taskAssignee": "Yudi", "taskDueDate": "30/03/2024", "status": "Draft" },
-        { "taskName": "Task 9", "taskCreationDate": "25/03/2024 ", "taskAssignmentDate": "27/03/2024", "taskAssignee": "Yudi", "taskDueDate": "30/03/2024", "status": "Draft" },
-        { "taskName": "Task 9", "taskCreationDate": "25/03/2024 ", "taskAssignmentDate": "27/03/2024", "taskAssignee": "Yudi", "taskDueDate": "30/03/2024", "status": "Draft" },
-        { "taskName": "Task 9", "taskCreationDate": "25/03/2024 ", "taskAssignmentDate": "27/03/2024", "taskAssignee": "Yudi", "taskDueDate": "30/03/2024", "status": "Draft" },
-
-        { "taskName": "Task 9", "taskCreationDate": "25/03/2024 ", "taskAssignmentDate": "27/03/2024", "taskAssignee": "Yudi", "taskDueDate": "30/03/2024", "status": "Draft" },
-        { "taskName": "Task 9", "taskCreationDate": "25/03/2024 ", "taskAssignmentDate": "27/03/2024", "taskAssignee": "Yudi", "taskDueDate": "30/03/2024", "status": "Draft" },
-
-        { "taskName": "Task 9", "taskCreationDate": "25/03/2024 ", "taskAssignmentDate": "27/03/2024", "taskAssignee": "Yudi", "taskDueDate": "30/03/2024", "status": "Draft" },
-        { "taskName": "Task 9", "taskCreationDate": "25/03/2024 ", "taskAssignmentDate": "27/03/2024", "taskAssignee": "Yudi", "taskDueDate": "30/03/2024", "status": "Draft" },
-        { "taskName": "Task 9", "taskCreationDate": "25/03/2024 ", "taskAssignmentDate": "27/03/2024", "taskAssignee": "Yudi", "taskDueDate": "30/03/2024", "status": "Draft" },
-        { "taskName": "Task 9", "taskCreationDate": "25/03/2024 ", "taskAssignmentDate": "27/03/2024", "taskAssignee": "Yudi", "taskDueDate": "30/03/2024", "status": "Draft" },
-        { "taskName": "Task 9", "taskCreationDate": "25/03/2024 ", "taskAssignmentDate": "27/03/2024", "taskAssignee": "Yudi", "taskDueDate": "30/03/2024", "status": "Draft" },
-        { "taskName": "Task 9", "taskCreationDate": "25/03/2024 ", "taskAssignmentDate": "27/03/2024", "taskAssignee": "Yudi", "taskDueDate": "30/03/2024", "status": "Draft" },
-        { "taskName": "Task 9", "taskCreationDate": "25/03/2024 ", "taskAssignmentDate": "27/03/2024", "taskAssignee": "Yudi", "taskDueDate": "30/03/2024", "status": "Draft" },
-        { "taskName": "Task 9", "taskCreationDate": "25/03/2024 ", "taskAssignmentDate": "27/03/2024", "taskAssignee": "Yudi", "taskDueDate": "30/03/2024", "status": "Draft" },
-
-
-
-
-
     ]);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await fetchTaskList(accessToken);
+                setRows(data);
+            } catch (error) {
+                console.error("Error fetching tasks:", error);
+                setError("Failed to fetch tasks. Please try again later.");
+            }
+        };
 
+        fetchData();
+    }, []);
 
     const [usermodelOpen, setUserModalOpen] = useState(false);
     const [userrows, setUserRows] = useState([
@@ -73,8 +66,14 @@ const Dashboard = () => {
 
     const [rowToEdit, setRowToEdit] = useState(null);
 
-    const handleDeleteRow = (targetIndex) => {
-        setRows(rows.filter((_, idx) => idx !== targetIndex));
+    const handleDeleteRow = async(targetIndex) => {
+        try {
+            await deleteTask(accessToken, rows[targetIndex].taskId); // Call deleteTask function
+            setRows(rows.filter((_, idx) => idx !== targetIndex)); // Update rows after successful deletion
+        } catch (error) {
+            console.error("Error deleting task:", error);
+            // Handle error (e.g., display an error message to the user)
+        }
     };
 
     const handleEditRow = (idx) => {
@@ -129,6 +128,7 @@ const Dashboard = () => {
                                 }}
                                 onSubmit={handleSubmit}
                                 defaultValue={rowToEdit !== null && rows[rowToEdit]}
+                                accessToken={accessToken}
                             />
                         )}
 
