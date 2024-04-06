@@ -5,7 +5,9 @@ import { BsFillTrashFill, BsFillPencilFill } from "react-icons/bs";
 import "./Table.css";
 
 
-export const Table = ({ rows, deleteRow, editRow }) => {
+export const Table = ({ rows, deleteRow, editRow, userRole }) => {
+    
+    const isAdmin = userRole === 'ROLE_ADMIN';
     return (
         <div className="table-wrapper">
             <table className="table">
@@ -39,10 +41,10 @@ export const Table = ({ rows, deleteRow, editRow }) => {
                                 </td>
                                 <td className="fit">
                                     <span className="actions">
-                                        <BsFillTrashFill
+                                       {isAdmin && <BsFillTrashFill
                                             className="delete-btn"
                                             onClick={() => deleteRow(idx)}
-                                        />
+                                        />}
                                         <BsFillPencilFill
                                             className="edit-btn"
                                             onClick={() => editRow(idx)}

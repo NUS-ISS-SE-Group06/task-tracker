@@ -2,7 +2,8 @@ import React, { useState,useEffect } from "react";
 import "./Modal.css";
 import { editTask } from "../../services/taskService";
 
-export const Modal = ({ closeModal, onSubmit, defaultValue, accessToken}) => {
+export const Modal = ({ closeModal, onSubmit, defaultValue, accessToken, userRole}) => {
+
   const [formState, setFormState] = useState({
     taskName: "",
     taskDescription: "",
@@ -78,6 +79,7 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, accessToken}) => {
 
     closeModal();
   };
+  const isAdmin = userRole === 'ROLE_ADMIN';
 
   return (
     <div
@@ -90,19 +92,19 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, accessToken}) => {
         <form>
           <div className="form-group">
             <label htmlFor="taskName">Task Name</label>
-            <input name="taskName" onChange={handleChange} value={formState.taskName} />
+            <input name="taskName" onChange={handleChange} value={formState.taskName} readOnly={!isAdmin}/>
           </div>
           <div className="form-group">
             <label htmlFor="taskDescription">Task Description</label>
-            <textarea name="taskDescription" onChange={handleChange} value={formState.taskDescription} />
+            <textarea name="taskDescription" onChange={handleChange} value={formState.taskDescription} readOnly={!isAdmin} />
           </div>
           <div className="form-group">
             <label htmlFor="taskAssignee">Task Assignee</label>
-            <input name="taskAssignee" onChange={handleChange} value={formState.taskAssignee} />
+            <input name="taskAssignee" onChange={handleChange} value={formState.taskAssignee} readOnly={!isAdmin}/>
           </div>
           <div className="form-group">
             <label htmlFor="taskDueDate">Task Due Date</label>
-            <input type="date" name="taskDueDate" onChange={handleChange} value={formState.taskDueDate} />
+            <input type="date" name="taskDueDate" onChange={handleChange} value={formState.taskDueDate} readOnly={!isAdmin}/>
           </div>
           <div className="form-group">
             <label htmlFor="taskStatus">Status</label>
