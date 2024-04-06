@@ -118,7 +118,7 @@ const Dashboard = () => {
                 {view === 'table' && (
                     <>
 
-                        <Table rows={rows} deleteRow={handleDeleteRow} editRow={handleEditRow} />
+                        <Table rows={rows} deleteRow={handleDeleteRow} editRow={handleEditRow} userRole={userRole} />
 
                         {modalOpen && (
                             <Modal
@@ -129,6 +129,7 @@ const Dashboard = () => {
                                 onSubmit={handleSubmit}
                                 defaultValue={rowToEdit !== null && rows[rowToEdit]}
                                 accessToken={accessToken}
+                                userRole={userRole}
                             />
                         )}
 
