@@ -6,6 +6,7 @@ import "./Table.css";
 
 
 export const Table = ({ rows, deleteRow, editRow, userRole }) => {
+    
     const isAdmin = userRole === 'ROLE_ADMIN';
     return (
         <div className="table-wrapper">
