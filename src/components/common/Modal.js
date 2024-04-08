@@ -18,8 +18,10 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, accessToken, userRol
         // Format date values
 
         const taskDueDate = new Date(defaultValue.taskDueDate);
-        const formattedTaskDueDate = taskDueDate.toISOString().split('T')[0];
-        console.log(defaultValue);
+        const localTimezoneOffset = taskDueDate.getTimezoneOffset() * 60000; // Timezone offset in milliseconds
+        const localTaskDueDate = new Date(taskDueDate.getTime() - localTimezoneOffset);
+        const formattedTaskDueDate = localTaskDueDate.toISOString().split('T')[0];
+
         // Set formatted date values and taskStatus
         setFormState(prevState => ({
             ...prevState,

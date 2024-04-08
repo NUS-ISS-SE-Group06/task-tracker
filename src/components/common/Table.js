@@ -8,6 +8,21 @@ import "./Table.css";
 export const Table = ({ rows, deleteRow, editRow, userRole }) => {
     
     const isAdmin = userRole === 'ROLE_ADMIN';
+    const formatDate = (dateString)=>{
+        const date = new Date(dateString);
+
+        // Check if the date is a valid Date object
+        if (!isNaN(date)) {
+            const yyyy = date.getFullYear();
+            const mm = String(date.getMonth() + 1).padStart(2, '0');
+            const dd = String(date.getDate()).padStart(2, '0');
+            return `${yyyy}-${mm}-${dd}`;
+        } else {
+            // If the dateString is not in datetime format, return it as is
+            return dateString;
+        }
+    }
+
     return (
         <div className="table-wrapper">
             <table className="table">
@@ -33,7 +48,7 @@ export const Table = ({ rows, deleteRow, editRow, userRole }) => {
                                 <td className="expand">{row.createdDate}</td>
                                 <td>{row.modifiedDate}</td>
                                 <td>{row.taskAssignee}</td>
-                                <td>{row.taskDueDate}</td>
+                                <td>{formatDate(row.taskDueDate)}</td>
                                 <td>
                                     <span className={`label label-${row.taskStatus}`}>
                                         {statusText}
