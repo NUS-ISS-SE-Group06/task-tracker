@@ -1,6 +1,6 @@
 import { Outlet, Link } from "react-router-dom";
 import React from 'react';
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import '../../assets/styles/Style.css';
 import { getCookieValue } from '../../services/cookieService';
 import { handleLogout } from '../../services/authService';
@@ -9,8 +9,10 @@ import { Table } from "./Table";
 import { Modal } from "./Modal";
 import { UserManagementTbl } from "./UserManagementTbl";
 import { UserModal } from "./UserModal";
+import { LeaderDashBoardTbl } from "./LeaderDashBoardTbl";
+import { LeaderDashBoardModal } from "./LeaderDashBoardModal";
 import UserRegistration from '../../userreg/UserRegistration';
-import { fetchTaskList,deleteTask } from "../../services/taskService";
+import { fetchTaskList, deleteTask } from "../../services/taskService";
 
 const Dashboard = () => {
     const accessToken = getCookieValue('authToken');
@@ -66,7 +68,7 @@ const Dashboard = () => {
 
     const [rowToEdit, setRowToEdit] = useState(null);
 
-    const handleDeleteRow = async(targetIndex) => {
+    const handleDeleteRow = async (targetIndex) => {
         try {
             await deleteTask(accessToken, rows[targetIndex].taskId); // Call deleteTask function
             setRows(rows.filter((_, idx) => idx !== targetIndex)); // Update rows after successful deletion
@@ -108,6 +110,44 @@ const Dashboard = () => {
 
 
 
+    const [leadermodelOpen, setLeaderModalOpen] = useState(false);
+    const [leaderrows, setLeaderRows] = useState([
+        { "userId": "000001", "userName": "Williamdou ", "groupId": "0000001", "groupName": "NUS SE GROUP6", "taskRewardPoint": "100000" },
+        { "userId": "000001", "userName": "Williamdou ", "groupId": "0000001", "groupName": "NUS SE GROUP6", "taskRewardPoint": "100000" },
+        { "userId": "000001", "userName": "Williamdou ", "groupId": "0000001", "groupName": "NUS SE GROUP6", "taskRewardPoint": "100000" },
+        { "userId": "000001", "userName": "Williamdou ", "groupId": "0000001", "groupName": "NUS SE GROUP6", "taskRewardPoint": "100000" },
+        { "userId": "000001", "userName": "Williamdou ", "groupId": "0000001", "groupName": "NUS SE GROUP6", "taskRewardPoint": "100000" }
+
+    ]);
+
+
+    const [leaderrowToEdit, setLeaderRowToEdit] = useState(null);
+
+    const handleLeaderDeleteRow = (targetIndex) => {
+        setUserRows(leaderrows.filter((_, idx) => idx !== targetIndex));
+    };
+
+    const handleLeaderEditRow = (idx) => {
+        setLeaderRowToEdit(idx);
+
+        setLeaderModalOpen(true);
+    };
+
+    const handleLeaderSubmit = (newRow) => {
+        userrowToEdit === null
+            ? setLeaderRows([...leaderrows, newRow])
+            : setLeaderRows(
+                leaderrows.map((currRow, idx) => {
+                    if (idx !== leaderrowToEdit) return currRow;
+
+                    return newRow;
+                })
+            );
+    };
+
+
+
+
     return (
         <div className="container">
             <div className="header">
@@ -118,7 +158,7 @@ const Dashboard = () => {
                 {view === 'table' && (
                     <>
 
-                        <Table rows={rows} deleteRow={handleDeleteRow} editRow={handleEditRow} userRole={role} />
+                        <Table rows={rows} deleteRow={handleDeleteRow} editRow={handleEditRow} />
 
                         {modalOpen && (
                             <Modal
@@ -129,8 +169,8 @@ const Dashboard = () => {
                                 onSubmit={handleSubmit}
                                 defaultValue={rowToEdit !== null && rows[rowToEdit]}
                                 accessToken={accessToken}
-                                userRole={role}
                             />
+
                         )}
 
                         <Outlet />
@@ -158,6 +198,28 @@ const Dashboard = () => {
 
 
                 )}
+                {view === 'leader' && (
+
+                    <>
+
+                        <LeaderDashBoardTbl rows={userrows} deleteRow={handleLeaderDeleteRow} editRow={handleLeaderEditRow} />
+
+                        {usermodelOpen && (
+                            <LeaderDashBoardModal
+                                closeModal={() => {
+                                    setLeaderModalOpen(false);
+                                    setLeaderRowToEdit(null);
+                                }}
+                                onSubmit={handleLeaderSubmit}
+                                defaultValue={leaderrowToEdit !== null && leaderrows[leaderrowToEdit]}
+                            />
+                        )}
+
+                        <Outlet />
+                    </>
+
+
+                )}
 
             </div>
 
@@ -172,7 +234,7 @@ const Dashboard = () => {
                             <Link onClick={() => setView('table')} >Task Management</Link>
                         </li>
                         <li>
-                            <Link to="/leaderboard">LeaderBoard</Link>
+                            <Link onClick={() => setView('leader')}>LeaderBoard</Link>
                         </li>
                         <li>
                             <Link onClick={handleLogout} to="/logout">Logout</Link>

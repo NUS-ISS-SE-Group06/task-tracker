@@ -1,30 +1,58 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-import { BsFillTrashFill, BsFillPencilFill } from "react-icons/bs";
+import { BsFillTrashFill, BsFillPencilFill, BsPlus } from "react-icons/bs";
 
 import "./Table.css";
+import { Modal } from "./Modal";
 
 
 export const Table = ({ rows, deleteRow, editRow, userRole }) => {
-    
-    const isAdmin = userRole === 'ROLE_ADMIN';
-    const formatDate = (dateString)=>{
-        const date = new Date(dateString);
 
-        // Check if the date is a valid Date object
+    const isAdmin = userRole === 'ROLE_ADMIN';
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
         if (!isNaN(date)) {
             const yyyy = date.getFullYear();
             const mm = String(date.getMonth() + 1).padStart(2, '0');
             const dd = String(date.getDate()).padStart(2, '0');
             return `${yyyy}-${mm}-${dd}`;
         } else {
-            // If the dateString is not in datetime format, return it as is
             return dateString;
         }
-    }
+    };
+
+    const [searchTerm, setSearchTerm] = useState("");
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
+    const filteredRows = rows.filter(row =>
+        row.taskName.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const handleAddNew = () => {
+        setIsAddModalOpen(true);
+    };
 
     return (
         <div className="table-wrapper">
+            <div className="search-section">
+                <input
+                    type="text"
+                    placeholder="Search..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <button className="add-new-btn" onClick={handleAddNew}><BsPlus /></button>
+                {isAddModalOpen && (
+                    <Modal
+                        closeModal={() => {
+                            setIsAddModalOpen(false);
+                            
+                        }}
+                   
+                    />
+                )}
+            </div>
             <table className="table">
                 <thead>
                     <tr>
@@ -38,10 +66,8 @@ export const Table = ({ rows, deleteRow, editRow, userRole }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {rows.map((row, idx) => {
-                        const statusText =
-                            row.taskStatus.charAt(0).toUpperCase() + row.taskStatus.slice(1);
-
+                    {filteredRows.map((row, idx) => {
+                        const statusText = row.taskStatus.charAt(0).toUpperCase() + row.taskStatus.slice(1);
                         return (
                             <tr key={idx}>
                                 <td>{row.taskName}</td>
@@ -56,7 +82,7 @@ export const Table = ({ rows, deleteRow, editRow, userRole }) => {
                                 </td>
                                 <td className="fit">
                                     <span className="actions">
-                                       {isAdmin && <BsFillTrashFill
+                                        {isAdmin && <BsFillTrashFill
                                             className="delete-btn"
                                             onClick={() => deleteRow(idx)}
                                         />}

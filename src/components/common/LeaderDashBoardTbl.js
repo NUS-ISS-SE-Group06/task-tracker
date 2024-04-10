@@ -3,10 +3,10 @@ import React,{ useState, useEffect } from "react";
 import { BsFillTrashFill, BsFillPencilFill, BsPlus } from "react-icons/bs";
 
 import "./Table.css";
-import {  UserModal } from "./UserModal";
+import {  LeaderDashBoardModal } from "./LeaderDashBoardModal";
 
 
-export const UserManagementTbl = ({ rows, deleteRow, editRow }) => {
+export const LeaderDashBoardTbl = ({ rows, deleteRow, editRow }) => {
 
     const [searchTerm, setSearchTerm] = useState("");
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -29,7 +29,7 @@ export const UserManagementTbl = ({ rows, deleteRow, editRow }) => {
                 />
                 <button className="add-new-btn" onClick={handleAddNew}><BsPlus /></button>
                 {isAddModalOpen && (
-                    <UserModal
+                    <LeaderDashBoardModal
                         closeModal={() => {
                             setIsAddModalOpen(false);
 
@@ -43,9 +43,9 @@ export const UserManagementTbl = ({ rows, deleteRow, editRow }) => {
                     <tr>
                         <th>User ID</th>
                         <th className="expand">User Name</th>
-                        <th>Email Address</th>
-                        <th>User Role</th>
-                        <th>Password</th>
+                        <th>Group ID</th>
+                        <th>Group Name</th>
+                        <th>Task Reward Point</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -57,9 +57,9 @@ export const UserManagementTbl = ({ rows, deleteRow, editRow }) => {
                             <tr key={idx}>
                                 <td>{row.userId}</td>
                                 <td className="expand">{row.userName}</td>
-                                <td>{row.Email}</td>
-                                <td>{row.userRole}</td>
-                                <td>{row.password}</td>
+                                <td>{row.groupId}</td>
+                                <td>{row.groupName}</td>
+                                <td>{row.taskRewardPoint}</td>
 
                                 <td className="fit">
                                     <span className="actions">

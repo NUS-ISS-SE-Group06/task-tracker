@@ -73,3 +73,33 @@
     color: #e10d05;
   }
   
+  .search-section {
+    display: flex;
+    width: 50%; /* Adjust the width as needed */
+    justify-content: flex-end; /* Align to the right */
+    align-items: center;
+    margin-bottom: 10px; /* Add spacing between search section and table */
+}
+
+.search-section input {
+    width: 70%; /* Adjust the width of the input field */
+    margin-right: 10px; /* Add spacing between input field and button */
+}
+
+.add-new-btn {
+    background-color: #007bff; /* Button background color */
+    color: white; /* Button text color */
+    border: none;
+    border-radius: 50%; /* Make it a circle */
+    padding: 10px;
+    cursor: pointer;
+    font-size: 1.5rem; /* Adjust icon size */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.add-new-btn:hover {
+    background-color: #0056b3; /* Change background color on hover */
+}
