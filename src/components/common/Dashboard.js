@@ -13,12 +13,13 @@ import { LeaderDashBoardTbl } from "./LeaderDashBoardTbl";
 import { LeaderDashBoardModal } from "./LeaderDashBoardModal";
 import UserRegistration from '../../userreg/UserRegistration';
 import { fetchTaskList, deleteTask } from "../../services/taskService";
+import { fetchCommentList } from "../../services/commentService";
 
 const Dashboard = () => {
     const accessToken = getCookieValue('authToken');
     const [modalOpen, setModalOpen] = useState(false);
-    const [rows, setRows] = useState([
-    ]);
+    const [rows, setRows] = useState([]);
+    const [commentrows, setCommentRows] = useState([]);
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -78,9 +79,16 @@ const Dashboard = () => {
         }
     };
 
-    const handleEditRow = (idx) => {
-        setRowToEdit(idx);
+    const handleEditRow = async (idx) => {
 
+        try {
+            const data = await fetchCommentList(accessToken,rows[idx].taskId);
+            setCommentRows(data);
+        } catch (error) {
+            console.error("Error fetching comment list:", error);
+            setError("Failed to fetch comment list. Please try again later.");
+        }
+        setRowToEdit(idx);
         setModalOpen(true);
     };
 
@@ -167,7 +175,7 @@ const Dashboard = () => {
                                     setRowToEdit(null);
                                 }}
                                 onSubmit={handleSubmit}
-                                defaultValue={rowToEdit !== null && rows[rowToEdit]}
+                                defaultValue={rowToEdit !== null ? { row: rows[rowToEdit], commentrows } : null}
                                 accessToken={accessToken}
                             />
 

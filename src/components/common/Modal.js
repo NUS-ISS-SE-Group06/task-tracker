@@ -10,23 +10,27 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, accessToken, userRol
     taskAssignee: "",
     taskDueDate: "",
     taskStatus: "Pending",
-    ...defaultValue, // Spread defaultValue to merge with default state
+    taskComment:"",
+    taskCommentHistory:"",
+    ...defaultValue.row, // Spread defaultValue to merge with default state
   });
   const [errors, setErrors] = useState("");
   useEffect(() => {
     if (defaultValue) {
         // Format date values
-
-        const taskDueDate = new Date(defaultValue.taskDueDate);
+  
+        const taskDueDate = new Date(defaultValue.row.taskDueDate);
         const localTimezoneOffset = taskDueDate.getTimezoneOffset() * 60000; // Timezone offset in milliseconds
         const localTaskDueDate = new Date(taskDueDate.getTime() - localTimezoneOffset);
         const formattedTaskDueDate = localTaskDueDate.toISOString().split('T')[0];
+        const taskCommentHistory = defaultValue.commentrows.map(row => row.taskComment).join('\n');
 
         // Set formatted date values and taskStatus
         setFormState(prevState => ({
             ...prevState,
-            taskDueDate: formattedTaskDueDate,
-            taskStatus: defaultValue.taskStatus // Set taskStatus from defaultValue
+            taskCommentHistory:taskCommentHistory,
+            taskDueDate: formattedTaskDueDate
+            //taskStatus: defaultValue.row.taskStatus // Set taskStatus from defaultValue
         }));
     }
 }, [defaultValue]);
@@ -61,7 +65,8 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, accessToken, userRol
         taskDescription: formState.taskDescription,
         taskAssignee: formState.taskAssignee,
         taskDueDate: formState.taskDueDate + "T00:00:00.000Z", // Add the time component,
-        taskStatus: formState.taskStatus
+        taskStatus: formState.taskStatus,
+        taskComment:formState.taskComment,
         // Include other task properties if needed
     };
 
@@ -119,6 +124,11 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, accessToken, userRol
               <option value="In Progress">In Progress</option>
               <option value="Complete">Complete</option>
             </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="taskComment">Comment</label>
+            <textarea name="taskComment" onChange={handleChange} value={formState.taskComment}/><br/>
+            <textarea name="taskCommentHistory"  value={formState.taskCommentHistory} disabled={true} hidden={!formState.taskCommentHistory}/>
           </div>
           {errors && <div className="error">{`Please include: ${errors}`}</div>}
           <button type="submit" className="btn" onClick={handleSubmit}>
