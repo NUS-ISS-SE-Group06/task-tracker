@@ -78,7 +78,7 @@ const Dashboard = () => {
         }
     };
 
-    const handleEditRow = (idx) => {
+    const handleEditRow = (idx) => {console.log(idx+"xxx")
         setRowToEdit(idx);
 
         setModalOpen(true);
@@ -104,7 +104,7 @@ const Dashboard = () => {
     const [signupUsername, setSignupUsername] = useState('');
     const [signupName, setSignupName] = useState('');
     const [signupEmail, setSignupEmail] = useState('');
-    const [userRole, setUserRole] = useState('ROLE_USER');
+    const [userRole, setUserRole] = useState(role);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
@@ -158,7 +158,7 @@ const Dashboard = () => {
                 {view === 'table' && (
                     <>
 
-                        <Table rows={rows} deleteRow={handleDeleteRow} editRow={handleEditRow} />
+                        <Table rows={rows} deleteRow={handleDeleteRow} editRow={handleEditRow} userRole={userRole} accessToken={accessToken}/>
 
                         {modalOpen && (
                             <Modal
@@ -169,6 +169,7 @@ const Dashboard = () => {
                                 onSubmit={handleSubmit}
                                 defaultValue={rowToEdit !== null && rows[rowToEdit]}
                                 accessToken={accessToken}
+                                userRole={userRole}
                             />
 
                         )}

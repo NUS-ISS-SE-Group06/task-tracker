@@ -68,7 +68,8 @@ const editTask = async(accessToken,taskId, taskData) => {
             throw new Error("Failed to update task");
         }
         else{
-            return "success";
+            const taskObj = response.json();
+            return taskObj;
         }
 
        
@@ -78,4 +79,29 @@ const editTask = async(accessToken,taskId, taskData) => {
         throw error;
     }
 }
-export {fetchTaskList, deleteTask, editTask}
+const createTask = async (accessToken, taskData) => {
+    try {
+        const requestBody = JSON.stringify(taskData);
+        const response = await fetch(BASE_URL + "/taskinfo/create", {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: requestBody
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to create task");
+            
+        } else {
+            const taskObj = response.json();
+            return taskObj;
+        }
+    } catch (error) {
+        console.error("Error creating task:", error);
+        throw error;
+    }
+};
+
+export {fetchTaskList, deleteTask, editTask, createTask}
