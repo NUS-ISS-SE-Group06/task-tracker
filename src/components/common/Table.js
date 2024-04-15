@@ -32,6 +32,19 @@ export const Table = ({ rows, deleteRow, editRow, userRole }) => {
     const handleAddNew = () => {
         setIsAddModalOpen(true);
     };
+    const handleSubmit = async (formData,taskObj) => {
+        // Perform actions with the form data, such as adding a new row to the table
+       if(taskObj.body !== null){
+        const { createdDate, modifiedDate, taskId } = taskObj.body;
+        formData.createdDate = createdDate;
+        formData.modifiedDate = modifiedDate;
+        formData.taskId = taskId;
+        
+       }
+        // Add the new row to the table
+         rows.push(formData);
+      
+    };
 
     return (
         <div className="table-wrapper">
@@ -47,9 +60,11 @@ export const Table = ({ rows, deleteRow, editRow, userRole }) => {
                     <Modal
                         closeModal={() => {
                             setIsAddModalOpen(false);
-                            
+                           
                         }}
-                   
+                        onSubmit={handleSubmit}
+                        defaultValue={null}
+                        userRole={userRole}
                     />
                 )}
             </div>

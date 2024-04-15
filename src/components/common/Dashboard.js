@@ -23,7 +23,7 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await fetchTaskList(accessToken);
+                const data = await fetchTaskList();
                 setRows(data);
             } catch (error) {
                 console.error("Error fetching tasks:", error);
@@ -71,7 +71,7 @@ const Dashboard = () => {
 
     const handleDeleteRow = async (targetIndex) => {
         try {
-            await deleteTask(accessToken, rows[targetIndex].taskId); // Call deleteTask function
+            await deleteTask(rows[targetIndex].taskId); // Call deleteTask function
             setRows(rows.filter((_, idx) => idx !== targetIndex)); // Update rows after successful deletion
         } catch (error) {
             console.error("Error deleting task:", error);
@@ -112,7 +112,7 @@ const Dashboard = () => {
     const [signupUsername, setSignupUsername] = useState('');
     const [signupName, setSignupName] = useState('');
     const [signupEmail, setSignupEmail] = useState('');
-    const [userRole, setUserRole] = useState('ROLE_USER');
+    const [userRole, setUserRole] = useState(role);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
@@ -166,7 +166,7 @@ const Dashboard = () => {
                 {view === 'table' && (
                     <>
 
-                        <Table rows={rows} deleteRow={handleDeleteRow} editRow={handleEditRow} />
+                        <Table rows={rows} deleteRow={handleDeleteRow} editRow={handleEditRow} userRole={userRole} />
 
                         {modalOpen && (
                             <Modal
@@ -177,6 +177,7 @@ const Dashboard = () => {
                                 onSubmit={handleSubmit}
                                 defaultValue={rowToEdit !== null ? { row: rows[rowToEdit], commentrows } : null}
                                 accessToken={accessToken}
+                                userRole={userRole}
                             />
 
                         )}
