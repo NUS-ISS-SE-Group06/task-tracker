@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from "react";
 import "./Modal.css";
 import { editTask } from "../../services/taskService";
+import { createComment } from "../../services/commentService";
 
 export const Modal = ({ closeModal, onSubmit, defaultValue, accessToken, userRole}) => {
 
@@ -12,25 +13,25 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, accessToken, userRol
     taskStatus: "Pending",
     taskComment:"",
     taskCommentHistory:"",
-    ...defaultValue.row, // Spread defaultValue to merge with default state
+    ...defaultValue?.row, // Spread defaultValue to merge with default state
   });
   const [errors, setErrors] = useState("");
   useEffect(() => {
     if (defaultValue) {
         // Format date values
   
-        const taskDueDate = new Date(defaultValue.row.taskDueDate);
+        const taskDueDate = new Date(defaultValue?.row.taskDueDate);
         const localTimezoneOffset = taskDueDate.getTimezoneOffset() * 60000; // Timezone offset in milliseconds
         const localTaskDueDate = new Date(taskDueDate.getTime() - localTimezoneOffset);
         const formattedTaskDueDate = localTaskDueDate.toISOString().split('T')[0];
-        const taskCommentHistory = defaultValue.commentrows.map(row => row.taskComment).join('\n');
+        const taskCommentHistory = defaultValue?.commentrows.map(row => row.taskComment).join('\n');
 
         // Set formatted date values and taskStatus
         setFormState(prevState => ({
             ...prevState,
             taskCommentHistory:taskCommentHistory,
             taskDueDate: formattedTaskDueDate
-            //taskStatus: defaultValue.row.taskStatus // Set taskStatus from defaultValue
+            //taskStatus: defaultValue.taskStatus // Set taskStatus from defaultValue
         }));
     }
 }, [defaultValue]);
@@ -66,12 +67,19 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, accessToken, userRol
         taskAssignee: formState.taskAssignee,
         taskDueDate: formState.taskDueDate + "T00:00:00.000Z", // Add the time component,
         taskStatus: formState.taskStatus,
-        taskComment:formState.taskComment,
         // Include other task properties if needed
-    };
+      };
+
+      const commentData = {
+        taskComment:formState.taskComment,
+      };
 
       const response = await editTask(accessToken, formState.taskId, taskData);
       if (response === "success") {
+        if (formState.taskComment){
+          const response2=await createComment(accessToken, formState.taskId, commentData);
+        }
+
         onSubmit(formState);
         closeModal();
       } else {

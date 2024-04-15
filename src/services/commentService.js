@@ -23,4 +23,37 @@ import { BASE_URL } from "../components/common/Constants";
     }
 };
 
-export {fetchCommentList}
+
+const createComment = async(accessToken,taskId, commentData) => {
+
+    try{
+        // Convert taskData to JSON string
+        const requestBody = JSON.stringify(commentData);
+        
+        const response = await fetch(BASE_URL + "/comment-info/create", {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: requestBody // Include JSON body in the request
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to create comment");
+        }
+        else{
+            return "success";
+        }
+
+       
+    }catch(error){
+
+        console.error("Error fetching comment:", error);
+        throw error;
+    }
+}
+
+
+
+export {fetchCommentList,createComment}
