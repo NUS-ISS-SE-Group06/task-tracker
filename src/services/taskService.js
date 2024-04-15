@@ -1,9 +1,9 @@
 import { BASE_URL } from "../components/common/Constants";
 import { getCookieValue } from './cookieService';
 
- const fetchTaskList = async (accessToken) => {
+ const fetchTaskList = async () => {
     try {
-        
+        const accessToken = getCookieValue('authToken');
       
         const response = await fetch(BASE_URL + "/taskinfo/tasklist", {
             headers: {

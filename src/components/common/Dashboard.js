@@ -22,7 +22,7 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await fetchTaskList(accessToken);
+                const data = await fetchTaskList();
                 setRows(data);
             } catch (error) {
                 console.error("Error fetching tasks:", error);
