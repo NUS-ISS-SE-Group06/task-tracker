@@ -70,7 +70,7 @@ const Dashboard = () => {
 
     const handleDeleteRow = async (targetIndex) => {
         try {
-            await deleteTask(accessToken, rows[targetIndex].taskId); // Call deleteTask function
+            await deleteTask(rows[targetIndex].taskId); // Call deleteTask function
             setRows(rows.filter((_, idx) => idx !== targetIndex)); // Update rows after successful deletion
         } catch (error) {
             console.error("Error deleting task:", error);
@@ -78,7 +78,7 @@ const Dashboard = () => {
         }
     };
 
-    const handleEditRow = (idx) => {console.log(idx+"xxx")
+    const handleEditRow = (idx) => {
         setRowToEdit(idx);
 
         setModalOpen(true);
@@ -158,7 +158,7 @@ const Dashboard = () => {
                 {view === 'table' && (
                     <>
 
-                        <Table rows={rows} deleteRow={handleDeleteRow} editRow={handleEditRow} userRole={userRole} accessToken={accessToken}/>
+                        <Table rows={rows} deleteRow={handleDeleteRow} editRow={handleEditRow} userRole={userRole} />
 
                         {modalOpen && (
                             <Modal

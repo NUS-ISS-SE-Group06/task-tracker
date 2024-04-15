@@ -6,7 +6,7 @@ import "./Table.css";
 import { Modal } from "./Modal";
 
 
-export const Table = ({ rows, deleteRow, editRow, userRole, accessToken }) => {
+export const Table = ({ rows, deleteRow, editRow, userRole }) => {
 
     const isAdmin = userRole === 'ROLE_ADMIN';
 
@@ -64,7 +64,6 @@ export const Table = ({ rows, deleteRow, editRow, userRole, accessToken }) => {
                         }}
                         onSubmit={handleSubmit}
                         defaultValue={null}
-                        accessToken={accessToken}
                         userRole={userRole}
                     />
                 )}

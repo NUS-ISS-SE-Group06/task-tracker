@@ -2,7 +2,7 @@ import React, { useState,useEffect } from "react";
 import "./Modal.css";
 import { createTask, editTask } from "../../services/taskService";
 
-export const Modal = ({ closeModal, onSubmit, defaultValue, accessToken, userRole}) => {
+export const Modal = ({ closeModal, onSubmit, defaultValue, userRole}) => {
 
  
   const [formState, setFormState] = useState({
@@ -78,7 +78,7 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, accessToken, userRol
         };
 
         if (defaultValue) {
-            const response = await editTask(accessToken, formState.taskId, taskData);
+            const response = await editTask(formState.taskId, taskData);
             if (response !== null && response.error === "") {
                 onSubmit(formState);
                 closeModal();
@@ -89,7 +89,7 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, accessToken, userRol
                 
             }
         } else {
-            const response = await createTask(accessToken, taskData);
+            const response = await createTask(taskData);
             if (response !== null && response.error === "") {
           
                 onSubmit(formState,response);

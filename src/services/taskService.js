@@ -1,4 +1,5 @@
 import { BASE_URL } from "../components/common/Constants";
+import { getCookieValue } from './cookieService';
 
  const fetchTaskList = async (accessToken) => {
     try {
@@ -22,7 +23,8 @@ import { BASE_URL } from "../components/common/Constants";
         throw error;
     }
 };
-const deleteTask = async(accessToken,taskId) =>{
+const deleteTask = async(taskId) =>{
+    const accessToken = getCookieValue('authToken');
 
     try{
         
@@ -49,8 +51,9 @@ const deleteTask = async(accessToken,taskId) =>{
     }
 
 }
-const editTask = async(accessToken,taskId, taskData) => {
-
+const editTask = async(taskId, taskData) => {
+    const accessToken = getCookieValue('authToken');
+     
     try{
         // Convert taskData to JSON string
         const requestBody = JSON.stringify(taskData);
@@ -79,7 +82,8 @@ const editTask = async(accessToken,taskId, taskData) => {
         throw error;
     }
 }
-const createTask = async (accessToken, taskData) => {
+const createTask = async (taskData) => {
+    const accessToken = getCookieValue('authToken');
     try {
         const requestBody = JSON.stringify(taskData);
         const response = await fetch(BASE_URL + "/taskinfo/create", {
