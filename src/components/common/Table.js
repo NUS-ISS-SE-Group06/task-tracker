@@ -55,7 +55,7 @@ export const Table = ({ rows, deleteRow, editRow, userRole }) => {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <button className="add-new-btn" onClick={handleAddNew}><BsPlus /></button>
+                {isAdmin &&<button className="add-new-btn" onClick={handleAddNew}><BsPlus /></button>}
                 {isAddModalOpen && (
                     <Modal
                         closeModal={() => {
