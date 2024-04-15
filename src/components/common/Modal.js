@@ -1,9 +1,10 @@
 import React, { useState,useEffect } from "react";
 import "./Modal.css";
-import { editTask } from "../../services/taskService";
+import { createTask, editTask } from "../../services/taskService";
 
-export const Modal = ({ closeModal, onSubmit, defaultValue, accessToken, userRole}) => {
+export const Modal = ({ closeModal, onSubmit, defaultValue, userRole}) => {
 
+ 
   const [formState, setFormState] = useState({
     taskName: "",
     taskDescription: "",
@@ -28,11 +29,21 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, accessToken, userRol
             taskDueDate: formattedTaskDueDate,
             taskStatus: defaultValue.taskStatus // Set taskStatus from defaultValue
         }));
+    }else{
+       // Set default values
+       setFormState({
+        taskName: "",
+        taskDescription: "",
+        taskAssignee: "",
+        taskDueDate: "", // You can set a default due date here
+        taskStatus: "Pending" // You can set a default status here
+    });
+
     }
 }, [defaultValue]);
 
   const validateForm = () => {
-    if (formState.taskName && formState.createdDate && formState.modifiedDate && formState.taskAssignee && formState.taskDueDate && formState.taskStatus) {
+    if (formState.taskName && formState.taskDescription && formState.taskAssignee && formState.taskDueDate && formState.taskStatus) {
       setErrors("");
       return true;
     } else {
@@ -51,36 +62,51 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, accessToken, userRol
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Submitting form");
 
     if (!validateForm()) return;
+
     try {
-      const taskData = {
-        taskName: formState.taskName,
-        taskDescription: formState.taskDescription,
-        taskAssignee: formState.taskAssignee,
-        taskDueDate: formState.taskDueDate + "T00:00:00.000Z", // Add the time component,
-        taskStatus: formState.taskStatus
-        // Include other task properties if needed
-    };
+        const taskData = {
+            taskName: formState.taskName,
+            taskDescription: formState.taskDescription,
+            taskAssignee: formState.taskAssignee,
+            taskDueDate: formState.taskDueDate + "T00:00:00.000Z",
+            taskStatus: formState.taskStatus
+        };
 
-      const response = await editTask(accessToken, formState.taskId, taskData);
-      if (response === "success") {
-        onSubmit(formState);
-        closeModal();
-      } else {
-        throw new Error("Failed to edit task");
-      }
+        if (defaultValue) {
+            const response = await editTask(formState.taskId, taskData);
+            if (response !== null && response.error === "") {
+                onSubmit(formState);
+                closeModal();
+            } else {
+               setErrors(response.error);
+               throw new Error("Failed to edit task"+response.error);
+               
+                
+            }
+        } else {
+            const response = await createTask(taskData);
+            if (response !== null && response.error === "") {
+          
+                onSubmit(formState,response);
+                closeModal();
+            } else {
+                setErrors(response.error);
+                throw new Error("Failed to create task"+response.error);
+            }
+        }
     } catch (error) {
-      console.error("Error editing task:", error);
-      // Handle error (e.g., display an error message to the user)
+        setErrors(error);
+        console.error("Error handling task submission:", error);
+        return false;
+        // Handle error (e.g., display an error message to the user)
     }
+};
 
-    onSubmit(formState);
-
-    closeModal();
-  };
   const isAdmin = userRole === 'ROLE_ADMIN';
 
   return (
