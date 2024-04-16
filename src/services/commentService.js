@@ -1,9 +1,10 @@
 import { BASE_URL } from "../components/common/Constants";
+import { getCookieValue } from './cookieService';
 
- const fetchCommentList = async (accessToken,taskId) => {
+const accessToken = getCookieValue('authToken');
+
+ const fetchCommentList = async (taskId) => {
     try {
-        
-      
         const response = await fetch(BASE_URL + "/comment-info/comment-list/"+taskId, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
@@ -24,10 +25,9 @@ import { BASE_URL } from "../components/common/Constants";
 };
 
 
-const createComment = async(accessToken,taskId, commentData) => {
+const createComment = async(taskId, commentData) => {
 
     try{
-        // Convert taskData to JSON string
         const requestBody = JSON.stringify(commentData);
         
         const response = await fetch(BASE_URL + "/comment-info/create", {
@@ -36,7 +36,7 @@ const createComment = async(accessToken,taskId, commentData) => {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json'
             },
-            body: requestBody // Include JSON body in the request
+            body: requestBody
         });
 
         if (!response.ok) {
@@ -53,7 +53,6 @@ const createComment = async(accessToken,taskId, commentData) => {
         throw error;
     }
 }
-
 
 
 export {fetchCommentList,createComment}
