@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from "react";
 import "./Modal.css";
 import { createTask, editTask } from "../../services/taskService";
+import { createComment } from "../../services/commentService";
 
 export const Modal = ({ closeModal, onSubmit, defaultValue, userRole}) => {
 
@@ -24,7 +25,10 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, userRole}) => {
         const localTimezoneOffset = taskDueDate.getTimezoneOffset() * 60000; // Timezone offset in milliseconds
         const localTaskDueDate = new Date(taskDueDate.getTime() - localTimezoneOffset);
         const formattedTaskDueDate = localTaskDueDate.toISOString().split('T')[0];
-        const taskCommentHistory = defaultValue?.commentrows.map(row => row.taskComment).join('\n');
+        const taskCommentHistory = defaultValue?.commentrows
+                                                      .sort((a, b) => b.task_comment_id - a.task_comment_id)
+                                                      .map(row => row.taskComment)
+                                                      .join('<br/>');
 
 
         // Set formatted date values and taskStatus
@@ -82,10 +86,25 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, userRole}) => {
             taskStatus: formState.taskStatus
         };
 
+        const currentDate = new Date();
+        const formattedDate = currentDate.toISOString().slice(0, 19).replace('T', ' ');
+
+
+        const commetData = {
+          taskId: formState.taskId,
+          taskComment: formState.taskComment,
+          createdDate: formattedDate,
+        };
+
 
         if (defaultValue) {
             const response = await editTask(formState.taskId, taskData);
             if (response !== null && response.error === "") {
+                const response2 =await createComment (commetData);
+                if (response2 !== "success" ) {
+                  setErrors(response2.error);
+                  throw new Error("Failed to add task comment"+response2.error);
+                }
                 onSubmit(formState);
                 closeModal();
             } else {
@@ -153,9 +172,11 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, userRole}) => {
           {formState.taskId && (
                   <div className="form-group" >
                   <label htmlFor="taskComment">Comment</label>
-                  <textarea name="taskComment" onChange={handleChange} value={formState.taskComment} /><br/>
-                  <textarea name="taskCommentHistory"  value={formState.taskCommentHistory} disabled={true} hidden={!formState.taskCommentHistory}/>
-                </div>
+                  <textarea name="taskComment" onChange={handleChange} value={formState.taskComment} />
+                  {formState.taskCommentHistory && (
+                    <label dangerouslySetInnerHTML={{ __html: formState.taskCommentHistory }} ></label>
+                  )}     
+                  </div>
           )}
     
           {errors && <div className="error">{`Please include: ${errors}`}</div>}

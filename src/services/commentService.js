@@ -25,10 +25,11 @@ const accessToken = getCookieValue('authToken');
 };
 
 
-const createComment = async(taskId, commentData) => {
+const createComment = async(commentData) => {
 
     try{
         const requestBody = JSON.stringify(commentData);
+        console.log(requestBody);
         
         const response = await fetch(BASE_URL + "/comment-info/create", {
             method: 'POST',
