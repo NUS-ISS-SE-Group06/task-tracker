@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { fetchUserList } from "../../services/taskService";
 
 import { BsFillTrashFill, BsFillPencilFill, BsPlus } from "react-icons/bs";
 
@@ -24,7 +25,17 @@ export const Table = ({ rows, deleteRow, editRow, userRole }) => {
 
     const [searchTerm, setSearchTerm] = useState("");
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [userList, setUserList] = useState([]);
 
+    useEffect(() => {
+        fetchUserList()
+            .then(data => {
+                setUserList(data);
+            })
+            .catch(error => {
+                console.error("Error fetching user list:", error);
+            });
+    }, []);
     const filteredRows = rows.filter(row =>
         row.taskName.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -65,6 +76,7 @@ export const Table = ({ rows, deleteRow, editRow, userRole }) => {
                         onSubmit={handleSubmit}
                         defaultValue={null}
                         userRole={userRole}
+                        userList={userList}
                     />
                 )}
             </div>
@@ -83,12 +95,14 @@ export const Table = ({ rows, deleteRow, editRow, userRole }) => {
                 <tbody>
                     {filteredRows.map((row, idx) => {
                         const statusText = row.taskStatus.charAt(0).toUpperCase() + row.taskStatus.slice(1);
+                        const assignee = userList.find(user => user.userId === row.taskAssignee);
+                        const assigneeName = assignee ? assignee.name : 'Unknown';
                         return (
                             <tr key={idx}>
                                 <td>{row.taskName}</td>
                                 <td className="expand">{row.createdDate}</td>
                                 <td>{row.modifiedDate}</td>
-                                <td>{row.taskAssignee}</td>
+                                <td>{assigneeName}</td>
                                 <td>{formatDate(row.taskDueDate)}</td>
                                 <td>
                                     <span className={`label label-${row.taskStatus}`}>

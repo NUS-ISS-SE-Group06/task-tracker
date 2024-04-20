@@ -107,5 +107,22 @@ const createTask = async (taskData) => {
         throw error;
     }
 };
-
-export {fetchTaskList, deleteTask, editTask, createTask}
+const fetchUserList = async () => {
+    const accessToken = getCookieValue('authToken');
+    try {
+        const response = await fetch(BASE_URL + "/userlist", {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });  
+      if (!response.ok) {
+        throw new Error("Failed to fetch user list");
+      }
+      const data = await response.json();
+      return data; // Update userList state with fetched data
+    } catch (error) {
+      console.error("Error fetching user list:", error);
+    }
+  };
+export {fetchTaskList, deleteTask, editTask, createTask,fetchUserList}
