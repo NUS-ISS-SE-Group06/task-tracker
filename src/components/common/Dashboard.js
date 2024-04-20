@@ -11,9 +11,9 @@ import { UserManagementTbl } from "./UserManagementTbl";
 import { UserModal } from "./UserModal";
 import { LeaderDashBoardTbl } from "./LeaderDashBoardTbl";
 import { LeaderDashBoardModal } from "./LeaderDashBoardModal";
-import UserRegistration from '../../userreg/UserRegistration';
 import { fetchTaskList, deleteTask } from "../../services/taskService";
 import { fetchCommentList } from "../../services/commentService";
+import { fetchUserList } from "../../services/userRegistrationService";
 
 const Dashboard = () => {
     const accessToken = getCookieValue('authToken');
@@ -30,14 +30,23 @@ const Dashboard = () => {
                 setError("Failed to fetch tasks. Please try again later.");
             }
         };
-
         fetchData();
+
+        const fetchUserData = async () => {
+            try {
+                const data = await fetchUserList();
+                setUserRows(data);
+            } catch (error) {
+                console.error("Error fetching User list:", error);
+                setError("Failed to fetch users. Please try again later.");
+            }
+        };
+        fetchUserData();
+
     }, []);
 
     const [usermodelOpen, setUserModalOpen] = useState(false);
     const [userrows, setUserRows] = useState([
-        { "userId": "000001", "userName": "Williamdou ", "Email": "william@nus.edu", "userRole": "Ordinary", "password": "1234567" }
-
     ]);
 
 
