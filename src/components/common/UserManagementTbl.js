@@ -12,7 +12,7 @@ export const UserManagementTbl = ({ rows, deleteRow, editRow }) => {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
     const filteredRows = rows.filter(row =>
-        row.userName.toLowerCase().includes(searchTerm.toLowerCase())
+        row.username.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const handleAddNew = () => {
@@ -41,11 +41,10 @@ export const UserManagementTbl = ({ rows, deleteRow, editRow }) => {
             <table className="table">
                 <thead>
                     <tr>
-                        <th>User ID</th>
-                        <th className="expand">User Name</th>
-                        <th>Email Address</th>
+                        <th>User Name</th>
+                        <th>Name</th>
+                        <th className="expand">Email Address</th>
                         <th>User Role</th>
-                        <th>Password</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -55,11 +54,10 @@ export const UserManagementTbl = ({ rows, deleteRow, editRow }) => {
 
                         return (
                             <tr key={idx}>
-                                <td>{row.userId}</td>
-                                <td className="expand">{row.userName}</td>
-                                <td>{row.Email}</td>
+                                <td>{row.username}</td>
+                                <td>{row.name}</td>
+                                <td className="expand">{row.email}</td>
                                 <td>{row.userRole}</td>
-                                <td>{row.password}</td>
 
                                 <td className="fit">
                                     <span className="actions">
