@@ -4,18 +4,15 @@ import "./Modal.css";
 export const UserModal = ({ closeModal, onSubmit, defaultValue }) => {
   const [formState, setFormState] = useState(
     defaultValue || {
-      userId: "",
-      userName: "",
       Email: "",
-      userRole: "",
-      password: ""
-   
+      Name: "",
+      PasswordChangeMandatory: false
     }
   );
   const [errors, setErrors] = useState("");
 
   const validateForm = () => {
-    if (formState.userId && formState.userName && formState.Email && formState.userRole && formState.password) {
+    if (formState.email && formState.name && formState.passwordChangeMandatory) {
       setErrors("");
       return true;
     } else {
@@ -54,24 +51,22 @@ export const UserModal = ({ closeModal, onSubmit, defaultValue }) => {
       <div className="modal">
         <form>
           <div className="form-group">
-            <label htmlFor="userId"> User ID</label>
-            <input name="userId" onChange={handleChange} value={formState.userId} />
-          </div>
-          <div className="form-group">
-            <label htmlFor="userName">User Name</label>
-            <input type="date" name="taskCreationDate" onChange={handleChange} value={formState.userName} />
+            <label htmlFor="Name">Name</label>
+            <input name="Name" onChange={handleChange} value={formState.name} />
           </div>
           <div className="form-group">
             <label htmlFor="Email">Email Address</label>
-            <input name="Email" onChange={handleChange} value={formState.Email} />
+            <input name="Email" onChange={handleChange} value={formState.email} />
           </div>
           <div className="form-group">
-            <label htmlFor="userRole">User Role</label>
-            <input name="userRole" onChange={handleChange} value={formState.userRole} />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input name="password" onChange={handleChange} value={formState.password} />
+            <label htmlFor="PasswordChangeMandatory">Reset Password</label>
+            <select
+              name="PasswordChangeMandatory"
+              onChange={handleChange}
+              value={formState.passwordChangeMandatory}>
+              <option value="TRUE">Yes</option>
+              <option value="FALSE">No</option>
+            </select>
           </div>
         
           {errors && <div className="error">{`Please include: ${errors}`}</div>}
