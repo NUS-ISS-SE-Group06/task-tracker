@@ -41,10 +41,11 @@ export const UserManagementTbl = ({ rows, deleteRow, editRow }) => {
             <table className="table">
                 <thead>
                     <tr>
-                        <th>User Name</th>
+                        <th>Username</th>
                         <th>Name</th>
                         <th className="expand">Email Address</th>
                         <th>User Role</th>
+                        <th>Password Change Mandatory</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -58,7 +59,7 @@ export const UserManagementTbl = ({ rows, deleteRow, editRow }) => {
                                 <td>{row.name}</td>
                                 <td className="expand">{row.email}</td>
                                 <td>{row.userRole}</td>
-
+                                <td>{row.passwordChangeMandatory}</td>
                                 <td className="fit">
                                     <span className="actions">
                                         <BsFillTrashFill
