@@ -35,7 +35,7 @@ export const Table = ({ rows, deleteRow, editRow, userRole }) => {
             .catch(error => {
                 console.error("Error fetching user list:", error);
             });
-    }, []);
+    }, [userRole]);
     const filteredRows = rows.filter(row =>
         row.taskName.toLowerCase().includes(searchTerm.toLowerCase())
     );
