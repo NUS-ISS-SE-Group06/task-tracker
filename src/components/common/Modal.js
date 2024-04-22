@@ -1,11 +1,11 @@
 import React, { useState,useEffect } from "react";
 import "./Modal.css";
-import { createTask, editTask } from "../../services/taskService";
+import { createTask, editTask,fetchUserList } from "../../services/taskService";
 import { createComment } from "../../services/commentService";
 
 export const Modal = ({ closeModal, onSubmit, defaultValue, userRole}) => {
+  const isAdmin = userRole === 'ROLE_ADMIN';
 
- 
   const [formState, setFormState] = useState({
     taskName: "",
     taskDescription: "",
@@ -17,8 +17,27 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, userRole}) => {
     ...defaultValue?.row, // Spread defaultValue to merge with default state
   });
   const [errors, setErrors] = useState("");
+  const [userList, setUserList] = useState([]);
+ 
   useEffect(() => {
-    if (defaultValue) {
+    let assignee = defaultValue.row.taskAssignee;
+    if(isAdmin){
+      fetchUserList(userRole)
+      .then(data => {
+        // Update userList state with fetched data
+        setUserList(data);
+        if(data.length > 0){
+ 
+        // Find the corresponding user in userList based on defaultValue
+        const defaultUser = data.find(user => user.userId === defaultValue.row.taskAssignee);
+        assignee = defaultUser.userId;
+        }
+      }).catch(error => {
+        console.error("Error fetching user list:", error);
+      });;
+    }
+       
+       if (defaultValue) {
         // Format date values
 
         const taskDueDate = new Date(defaultValue?.row.taskDueDate);
@@ -29,6 +48,7 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, userRole}) => {
                                                       .sort((a, b) => b.task_comment_id - a.task_comment_id)
                                                       .map(row => row.taskComment)
                                                       .join('<br/>');
+       
 
 
         // Set formatted date values and taskStatus
@@ -37,6 +57,7 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, userRole}) => {
             taskDueDate: formattedTaskDueDate,
             taskStatus: defaultValue?.row.taskStatus, // Set taskStatus from defaultValue
             taskCommentHistory:taskCommentHistory,
+            taskAssignee: assignee
         }));
     }else{
        // Set default values
@@ -49,6 +70,7 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, userRole}) => {
     });
 
     }
+    
 }, [defaultValue]);
 
   const validateForm = () => {
@@ -68,7 +90,26 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, userRole}) => {
   };
 
   const handleChange = (e) => {
-    setFormState({ ...formState, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+   
+    if (name === "taskAssignee") {
+    
+      if (userList.length === 0) {
+        // User list is empty, handle this case gracefully
+        console.log("User list is empty");
+        return;
+      }
+      
+      const selectedUser = userList.find(user => user.userId == value);
+      
+      
+      const userId = selectedUser ? selectedUser.userId : "";
+   
+      setFormState({ ...formState, [name]: userId });
+    } else{
+      setFormState({ ...formState, [e.target.name]: e.target.value });
+    }
+    
   };
 
   const handleSubmit = async (e) => {
@@ -130,7 +171,7 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, userRole}) => {
     }
 };
 
-  const isAdmin = userRole === 'ROLE_ADMIN';
+
 
   return (
     <div
@@ -149,14 +190,27 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, userRole}) => {
             <label htmlFor="taskDescription">Task Description</label>
             <textarea name="taskDescription" onChange={handleChange} value={formState.taskDescription} readOnly={!isAdmin} />
           </div>
-          <div className="form-group">
+          {isAdmin && <div className="form-group">
             <label htmlFor="taskAssignee">Task Assignee</label>
-            <input name="taskAssignee" onChange={handleChange} value={formState.taskAssignee} readOnly={!isAdmin}/>
-          </div>
-          <div className="form-group">
+            {/* <input name="taskAssignee" onChange={handleChange} value={formState.taskAssignee} readOnly={!isAdmin}/> */}
+            <select
+              name="taskAssignee"
+              onChange={handleChange}
+              value={formState.taskAssignee}
+              readOnly={!isAdmin}
+            >
+              <option value="">Select Assignee</option>
+              {userList.map((user) => (
+                <option key={user.userId} value={user.userId}>
+                  {user.name}
+                </option>
+              ))}
+            </select>
+          </div>}
+          {isAdmin && <div className="form-group">
             <label htmlFor="taskDueDate">Task Due Date</label>
             <input type="date" name="taskDueDate" onChange={handleChange} value={formState.taskDueDate} readOnly={!isAdmin}/>
-          </div>
+          </div>}
           <div className="form-group">
             <label htmlFor="taskStatus">Status</label>
             <select
