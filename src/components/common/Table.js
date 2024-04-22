@@ -28,7 +28,7 @@ export const Table = ({ rows, deleteRow, editRow, userRole }) => {
     const [userList, setUserList] = useState([]);
 
     useEffect(() => {
-        fetchUserList()
+        fetchUserList(userRole)
             .then(data => {
                 setUserList(data);
             })
@@ -95,8 +95,12 @@ export const Table = ({ rows, deleteRow, editRow, userRole }) => {
                 <tbody>
                     {filteredRows.map((row, idx) => {
                         const statusText = row.taskStatus.charAt(0).toUpperCase() + row.taskStatus.slice(1);
-                        const assignee = userList.find(user => user.userId === row.taskAssignee);
-                        const assigneeName = assignee ? assignee.name : 'Unknown';
+                        let assigneeName = "";
+                        if(isAdmin){
+                            const assignee = userList.find(user => user.userId === row.taskAssignee);
+                             assigneeName = assignee ? assignee.name : 'Unknown';
+                        }
+                        
                         return (
                             <tr key={idx}>
                                 <td>{row.taskName}</td>

@@ -4,8 +4,8 @@ import { createTask, editTask,fetchUserList } from "../../services/taskService";
 import { createComment } from "../../services/commentService";
 
 export const Modal = ({ closeModal, onSubmit, defaultValue, userRole}) => {
+  const isAdmin = userRole === 'ROLE_ADMIN';
 
- 
   const [formState, setFormState] = useState({
     taskName: "",
     taskDescription: "",
@@ -18,16 +18,24 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, userRole}) => {
   });
   const [errors, setErrors] = useState("");
   const [userList, setUserList] = useState([]);
-
+ 
   useEffect(() => {
-    
-     // Fetch user list when component mounts
-     fetchUserList()
-     .then(data => {
-       // Update userList state with fetched data
-       setUserList(data);
-       // Find the corresponding user in userList based on defaultValue
-       const defaultUser = data.find(user => user.userId === defaultValue.row.taskAssignee);
+    let assignee = defaultValue.row.taskAssignee;
+    if(isAdmin){
+      fetchUserList(userRole)
+      .then(data => {
+        // Update userList state with fetched data
+        setUserList(data);
+        if(data.length > 0){
+ 
+        // Find the corresponding user in userList based on defaultValue
+        const defaultUser = data.find(user => user.userId === defaultValue.row.taskAssignee);
+        assignee = defaultUser.userId;
+        }
+      }).catch(error => {
+        console.error("Error fetching user list:", error);
+      });;
+    }
        
        if (defaultValue) {
         // Format date values
@@ -49,7 +57,7 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, userRole}) => {
             taskDueDate: formattedTaskDueDate,
             taskStatus: defaultValue?.row.taskStatus, // Set taskStatus from defaultValue
             taskCommentHistory:taskCommentHistory,
-            taskAssignee: defaultUser ? defaultUser.userId : ""
+            taskAssignee: assignee
         }));
     }else{
        // Set default values
@@ -62,10 +70,6 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, userRole}) => {
     });
 
     }
-     })
-     .catch(error => {
-       console.error("Error fetching user list:", error);
-     });
     
 }, [defaultValue]);
 
@@ -167,7 +171,7 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, userRole}) => {
     }
 };
 
-  const isAdmin = userRole === 'ROLE_ADMIN';
+
 
   return (
     <div
@@ -186,7 +190,7 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, userRole}) => {
             <label htmlFor="taskDescription">Task Description</label>
             <textarea name="taskDescription" onChange={handleChange} value={formState.taskDescription} readOnly={!isAdmin} />
           </div>
-          <div className="form-group">
+          {isAdmin && <div className="form-group">
             <label htmlFor="taskAssignee">Task Assignee</label>
             {/* <input name="taskAssignee" onChange={handleChange} value={formState.taskAssignee} readOnly={!isAdmin}/> */}
             <select
@@ -202,11 +206,11 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, userRole}) => {
                 </option>
               ))}
             </select>
-          </div>
-          <div className="form-group">
+          </div>}
+          {isAdmin && <div className="form-group">
             <label htmlFor="taskDueDate">Task Due Date</label>
             <input type="date" name="taskDueDate" onChange={handleChange} value={formState.taskDueDate} readOnly={!isAdmin}/>
-          </div>
+          </div>}
           <div className="form-group">
             <label htmlFor="taskStatus">Status</label>
             <select

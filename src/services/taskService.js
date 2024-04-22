@@ -52,6 +52,7 @@ const deleteTask = async(taskId) =>{
 
 }
 const editTask = async(taskId, taskData) => {
+    console.log(taskData)
     const accessToken = getCookieValue('authToken');
      
     try{
@@ -107,20 +108,23 @@ const createTask = async (taskData) => {
         throw error;
     }
 };
-const fetchUserList = async () => {
+const fetchUserList = async (role) => {
     const accessToken = getCookieValue('authToken');
     try {
-        const response = await fetch(BASE_URL + "/userlist", {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json'
-            }
-        });  
-      if (!response.ok) {
-        throw new Error("Failed to fetch user list");
-      }
-      const data = await response.json();
-      return data; // Update userList state with fetched data
+        if(role === 'ROLE_ADMIN'){
+            const response = await fetch(BASE_URL + "/userlist", {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json'
+                }
+            });  
+          if (!response.ok) {
+            throw new Error("Failed to fetch user list");
+          }
+          const data = await response.json();
+          return data; // Update userList state with fetched data
+        }
+      
     } catch (error) {
       console.error("Error fetching user list:", error);
     }
