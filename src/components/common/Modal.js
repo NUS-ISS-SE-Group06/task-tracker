@@ -71,7 +71,7 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, userRole}) => {
 
     }
     
-}, [defaultValue]);
+}, [isAdmin, userRole,defaultValue]);
 
   const validateForm = () => {
     if (formState.taskName && formState.taskDescription && formState.taskAssignee && formState.taskDueDate && formState.taskStatus) {
@@ -100,7 +100,7 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, userRole}) => {
         return;
       }
       
-      const selectedUser = userList.find(user => user.userId == value);
+      const selectedUser = userList.find(user => user.userId === value);
       
       
       const userId = selectedUser ? selectedUser.userId : "";
@@ -141,8 +141,8 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, userRole}) => {
         if (defaultValue) {
             const response = await editTask(formState.taskId, taskData);
             if (response !== null && response.error === "") {
-                const response2 =await createComment (commetData);
-                if (response2 !== "success" ) {
+                const response2 = await createComment (commetData);
+                if (response2 !== "success") {
                   setErrors(response2.error);
                   throw new Error("Failed to add task comment"+response2.error);
                 }
