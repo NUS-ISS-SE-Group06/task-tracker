@@ -1,21 +1,20 @@
 import React, { useState } from "react";
 import "./Modal.css";
+import { editUserInfo } from "../../services/userRegistrationService";
 
 export const UserModal = ({ closeModal, onSubmit, defaultValue }) => {
   const [formState, setFormState] = useState(
     defaultValue || {
-      userId: "",
-      userName: "",
-      Email: "",
-      userRole: "",
-      password: ""
-   
+      email: "",
+      name: "",
+      userRole: "ROLE_USER",
+      passwordChangeMandatory: "TRUE"
     }
   );
   const [errors, setErrors] = useState("");
 
   const validateForm = () => {
-    if (formState.userId && formState.userName && formState.Email && formState.userRole && formState.password) {
+    if (formState.email && formState.name && formState.passwordChangeMandatory) {
       setErrors("");
       return true;
     } else {
@@ -34,14 +33,59 @@ export const UserModal = ({ closeModal, onSubmit, defaultValue }) => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
+    console.log("Submitting User Registration form");
     if (!validateForm()) return;
 
-    onSubmit(formState);
+    
+    try {
+      const userRegData = {
+          userId: formState.userId,
+          name: formState.name,
+          email: formState.email,
+          userRole: formState.userRole,
+          username: formState.username,
+          passwordChangeMandatory: formState.passwordChangeMandatory,
+          deleteFlag: formState.deleteFlag
+      };
 
-    closeModal();
+      if(formState.userId === undefined){
+        console.log("New User Insertion");
+      } else{
+        const response = await editUserInfo(userRegData);
+        if (response !== null && response.error === "") {
+            onSubmit(formState);
+            closeModal();
+        } else {
+           setErrors(response.error);
+           throw new Error("Failed to edit user Registration"+response.error);
+        }
+      }
+      
+
+      // if (defaultValue) {
+         
+      // } else {
+      //     const response = await createTask(taskData);
+      //     if (response !== null && response.error === "") {
+        
+      //         onSubmit(formState,response);
+      //         closeModal();
+      //     } else {
+      //         setErrors(response.error);
+      //         throw new Error("Failed to create task"+response.error);
+      //     }
+      // }
+  } catch (error) {
+      setErrors(error);
+      console.error("Error handling task submission:", error);
+      return false;
+      // Handle error (e.g., display an error message to the user)
+  }
+
+
   };
 
   return (
@@ -54,24 +98,29 @@ export const UserModal = ({ closeModal, onSubmit, defaultValue }) => {
       <div className="modal">
         <form>
           <div className="form-group">
-            <label htmlFor="userId"> User ID</label>
-            <input name="userId" onChange={handleChange} value={formState.userId} />
+            <label htmlFor="name">Name</label>
+            <input name="name" onChange={handleChange} value={formState.name} />
           </div>
           <div className="form-group">
-            <label htmlFor="userName">User Name</label>
-            <input type="date" name="taskCreationDate" onChange={handleChange} value={formState.userName} />
-          </div>
-          <div className="form-group">
-            <label htmlFor="Email">Email Address</label>
-            <input name="Email" onChange={handleChange} value={formState.Email} />
+            <label htmlFor="email">Email Address</label>
+            <input name="email" onChange={handleChange} value={formState.email} />
           </div>
           <div className="form-group">
             <label htmlFor="userRole">User Role</label>
-            <input name="userRole" onChange={handleChange} value={formState.userRole} />
+            <select name="userRole" onChange={handleChange} value={formState.userRole}>
+              <option value="ROLE_USER">User</option>
+              <option value="ROLE_ADMIN">Admin</option>
+            </select>
           </div>
           <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input name="password" onChange={handleChange} value={formState.password} />
+            <label htmlFor="passwordChangeMandatory">Reset Password</label>
+            <select
+              name="passwordChangeMandatory"
+              onChange={handleChange}
+              value={formState.passwordChangeMandatory}>
+              <option value="TRUE">Yes</option>
+              <option value="FALSE">No</option>
+            </select>
           </div>
         
           {errors && <div className="error">{`Please include: ${errors}`}</div>}
