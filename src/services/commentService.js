@@ -1,9 +1,8 @@
 import { BASE_URL } from "../components/common/Constants";
 import { getCookieValue } from './cookieService';
 
-const accessToken = getCookieValue('authToken');
-
  const fetchCommentList = async (taskId) => {
+    const accessToken = getCookieValue('authToken');
     try {
         const response = await fetch(BASE_URL + "/comment-info/comment-list/"+taskId, {
             headers: {
@@ -26,7 +25,7 @@ const accessToken = getCookieValue('authToken');
 
 
 const createComment = async(commentData) => {
-
+    const accessToken = getCookieValue('authToken');
     try{
         const requestBody = JSON.stringify(commentData);
         console.log(requestBody);
