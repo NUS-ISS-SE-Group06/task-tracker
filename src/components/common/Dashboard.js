@@ -13,7 +13,7 @@ import { LeaderDashBoardTbl } from "./LeaderDashBoardTbl";
 import { LeaderDashBoardModal } from "./LeaderDashBoardModal";
 import { fetchTaskList, deleteTask } from "../../services/taskService";
 import { fetchCommentList } from "../../services/commentService";
-import { fetchUserList } from "../../services/userRegistrationService";
+import { fetchUserList, deleteUser } from "../../services/userRegistrationService";
 
 const Dashboard = () => {
     const accessToken = getCookieValue('authToken');
@@ -52,8 +52,13 @@ const Dashboard = () => {
 
     const [userrowToEdit, setUserRowToEdit] = useState(null);
 
-    const handleUserDeleteRow = (targetIndex) => {
-        setUserRows(userrows.filter((_, idx) => idx !== targetIndex));
+    const handleUserDeleteRow = async (targetIndex) => {
+        try {
+            await deleteUser(userrows[targetIndex]); // Call deleteUser function
+            setUserRows(userrows.filter((_, idx) => idx !== targetIndex)); // Update rows after successful deletion
+        } catch (error) {
+            console.error("Error deleting User:", error);
+        }
     };
 
     const handleUserEditRow = (idx) => {

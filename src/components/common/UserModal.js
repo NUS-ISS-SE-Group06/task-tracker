@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Modal.css";
-import { editUserInfo } from "../../services/userRegistrationService";
+import { createUserInfo, editUserInfo } from "../../services/userRegistrationService";
 
 export const UserModal = ({ closeModal, onSubmit, defaultValue }) => {
   const [formState, setFormState] = useState(
@@ -53,6 +53,15 @@ export const UserModal = ({ closeModal, onSubmit, defaultValue }) => {
 
       if(formState.userId === undefined){
         console.log("New User Insertion");
+        userRegData.userId = 0;
+        const response = await createUserInfo(userRegData);
+        if (response !== null && response.error === "") {
+            onSubmit(formState, response);
+            closeModal();
+        } else {
+           setErrors(response.error);
+           throw new Error("Failed to edit user Registration"+response.error);
+        }
       } else{
         const response = await editUserInfo(userRegData);
         if (response !== null && response.error === "") {
@@ -63,24 +72,9 @@ export const UserModal = ({ closeModal, onSubmit, defaultValue }) => {
            throw new Error("Failed to edit user Registration"+response.error);
         }
       }
-      
-
-      // if (defaultValue) {
-         
-      // } else {
-      //     const response = await createTask(taskData);
-      //     if (response !== null && response.error === "") {
-        
-      //         onSubmit(formState,response);
-      //         closeModal();
-      //     } else {
-      //         setErrors(response.error);
-      //         throw new Error("Failed to create task"+response.error);
-      //     }
-      // }
   } catch (error) {
       setErrors(error);
-      console.error("Error handling task submission:", error);
+      console.error("Error handling User Creation submission:", error);
       return false;
       // Handle error (e.g., display an error message to the user)
   }
@@ -97,6 +91,10 @@ export const UserModal = ({ closeModal, onSubmit, defaultValue }) => {
     >
       <div className="modal">
         <form>
+        <div className="form-group">
+            <label htmlFor="username">User Name</label>
+            <input name="username" onChange={handleChange} value={formState.username} />
+          </div>
           <div className="form-group">
             <label htmlFor="name">Name</label>
             <input name="name" onChange={handleChange} value={formState.name} />
