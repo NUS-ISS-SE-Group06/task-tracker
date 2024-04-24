@@ -4,8 +4,9 @@ import "./Modal.css";
 export const LeaderDashBoardModal = ({ closeModal, onSubmit, defaultValue }) => {
   const [formState, setFormState] = useState(
     defaultValue || {
+      id: "",
       userId: "",
-      userName: "",
+      name: "",
       groupId: "",
       groupName: "",
       taskRewardPoint: ""
@@ -15,7 +16,7 @@ export const LeaderDashBoardModal = ({ closeModal, onSubmit, defaultValue }) => 
   const [errors, setErrors] = useState("");
 
   const validateForm = () => {
-    if (formState.userId && formState.userName && formState.groupId && formState.groupName && formState.taskRewardPoint) {
+    if (formState.id &&formState.userId && formState.name && formState.groupId && formState.groupName && formState.taskRewardPoint) {
       setErrors("");
       return true;
     } else {
@@ -53,13 +54,17 @@ export const LeaderDashBoardModal = ({ closeModal, onSubmit, defaultValue }) => 
     >
       <div className="modal">
         <form>
+        <div className="form-group">
+            <label htmlFor="id"> ID</label>
+            <input name="id" onChange={handleChange} value={formState.id} />
+          </div>
           <div className="form-group">
             <label htmlFor="userId"> User ID</label>
             <input name="userId" onChange={handleChange} value={formState.userId} />
           </div>
           <div className="form-group">
-            <label htmlFor="userName">User Name</label>
-            <input name="userName" onChange={handleChange} value={formState.userName} />
+            <label htmlFor="name">User Name</label>
+            <input name="name" onChange={handleChange} value={formState.name} />
           </div>
           <div className="form-group">
             <label htmlFor="groupId">Group ID</label>

@@ -13,26 +13,48 @@ import { LeaderDashBoardTbl } from "./LeaderDashBoardTbl";
 import { LeaderDashBoardModal } from "./LeaderDashBoardModal";
 import UserRegistration from '../../userreg/UserRegistration';
 import { fetchTaskList, deleteTask } from "../../services/taskService";
+import { fetchLeaderBoard } from "../../services/leaderService";
 import { fetchCommentList } from "../../services/commentService";
 
 const Dashboard = () => {
+    const [view, setView] = useState('table'); // 'table' is the default view
     const accessToken = getCookieValue('authToken');
     const [modalOpen, setModalOpen] = useState(false);
     const [rows, setRows] = useState([]);
+    const [leaderrows, setLeaderRows] = useState([
+
+    ]);
+
     const [commentrows, setCommentRows] = useState([]);
     useEffect(() => {
+
         const fetchData = async () => {
-            try {
-                const data = await fetchTaskList();
-                setRows(data);
-            } catch (error) {
-                console.error("Error fetching tasks:", error);
-                setError("Failed to fetch tasks. Please try again later.");
+            if (view === 'table') {
+                try {
+                    const data = await fetchTaskList();
+                    setRows(data);
+                } catch (error) {
+                    console.error("Error fetching tasks:", error);
+                    setError("Failed to fetch tasks. Please try again later.");
+                }
+              
             }
+            if (view === 'leader') {
+                try {
+                    console.log('hello1')
+                    const data = await fetchLeaderBoard();
+                    setLeaderRows(data);
+                } catch (error) {
+                    console.error("Error fetching tasks:", error);
+                    setError("Failed to fetch tasks. Please try again later.");
+                }
+
+            }
+
         };
 
         fetchData();
-    }, []);
+    }, [view]);
 
     const [usermodelOpen, setUserModalOpen] = useState(false);
     const [userrows, setUserRows] = useState([
@@ -65,7 +87,7 @@ const Dashboard = () => {
             );
     };
 
-    const [view, setView] = useState('table'); // 'table' is the default view
+   
 
     const [rowToEdit, setRowToEdit] = useState(null);
 
@@ -118,14 +140,7 @@ const Dashboard = () => {
 
 
     const [leadermodelOpen, setLeaderModalOpen] = useState(false);
-    const [leaderrows, setLeaderRows] = useState([
-        { "userId": "000001", "userName": "Williamdou ", "groupId": "0000001", "groupName": "NUS SE GROUP6", "taskRewardPoint": "100000" },
-        { "userId": "000001", "userName": "Williamdou ", "groupId": "0000001", "groupName": "NUS SE GROUP6", "taskRewardPoint": "100000" },
-        { "userId": "000001", "userName": "Williamdou ", "groupId": "0000001", "groupName": "NUS SE GROUP6", "taskRewardPoint": "100000" },
-        { "userId": "000001", "userName": "Williamdou ", "groupId": "0000001", "groupName": "NUS SE GROUP6", "taskRewardPoint": "100000" },
-        { "userId": "000001", "userName": "Williamdou ", "groupId": "0000001", "groupName": "NUS SE GROUP6", "taskRewardPoint": "100000" }
 
-    ]);
 
 
     const [leaderrowToEdit, setLeaderRowToEdit] = useState(null);
@@ -175,7 +190,7 @@ const Dashboard = () => {
                                 }}
                                 onSubmit={handleSubmit}
                                 userRole={userRole}
-                                defaultValue={rowToEdit !== null ? {row: rows[rowToEdit], commentrows } :null }
+                                defaultValue={rowToEdit !== null ? { row: rows[rowToEdit], commentrows } : null}
                                 accessToken={accessToken}
                             />
 
@@ -210,9 +225,9 @@ const Dashboard = () => {
 
                     <>
 
-                        <LeaderDashBoardTbl rows={userrows} deleteRow={handleLeaderDeleteRow} editRow={handleLeaderEditRow} />
+                        <LeaderDashBoardTbl rows={leaderrows} deleteRow={handleLeaderDeleteRow} editRow={handleLeaderEditRow} />
 
-                        {usermodelOpen && (
+                        {leadermodelOpen && (
                             <LeaderDashBoardModal
                                 closeModal={() => {
                                     setLeaderModalOpen(false);
