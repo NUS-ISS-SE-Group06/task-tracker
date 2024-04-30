@@ -19,6 +19,7 @@ const Dashboard = () => {
     const accessToken = getCookieValue('authToken');
     const [modalOpen, setModalOpen] = useState(false);
     const [rows, setRows] = useState([]);
+    const [error, setError] = useState(null);
     const [commentrows, setCommentRows] = useState([]);
     useEffect(() => {
         const fetchData = async () => {
@@ -92,7 +93,7 @@ const Dashboard = () => {
             // Handle error (e.g., display an error message to the user)
         }
     };
-
+   
     const handleEditRow = async (idx) => {
         try {
             const data = await fetchCommentList(rows[idx].taskId);
@@ -142,7 +143,7 @@ const Dashboard = () => {
     ]);
 
 
-    const [leaderrowToEdit, setLeaderRowToEdit] = useState(null);
+    const [leaderrowToEdit, setLeaderRowToEdit,setLeaderModalOpen] = useState(null);
 
     const handleLeaderDeleteRow = (targetIndex) => {
         setUserRows(leaderrows.filter((_, idx) => idx !== targetIndex));
