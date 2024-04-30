@@ -4,6 +4,10 @@ import { BsFillTrashFill, BsFillPencilFill, BsPlus } from "react-icons/bs";
 
 import "./Table.css";
 import {  UserModal } from "./UserModal";
+import { RiKeyLine } from 'react-icons/ri';
+import { RiLockPasswordLine } from 'react-icons/ri';
+import { IoIosRefreshCircle } from 'react-icons/io';
+
 
 
 export const UserManagementTbl = ({ rows, deleteRow, editRow }) => {
@@ -45,7 +49,7 @@ export const UserManagementTbl = ({ rows, deleteRow, editRow }) => {
                         <th>Name</th>
                         <th className="expand">Email Address</th>
                         <th>User Role</th>
-                        <th>Password Change Mandatory</th>
+                        <th>Password</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -59,7 +63,8 @@ export const UserManagementTbl = ({ rows, deleteRow, editRow }) => {
                                 <td>{row.name}</td>
                                 <td className="expand">{row.email}</td>
                                 <td>{row.userRole}</td>
-                                <td>{row.passwordChangeMandatory}</td>
+                                <td>{row.password}</td>
+
                                 <td className="fit">
                                     <span className="actions">
                                         <BsFillTrashFill
