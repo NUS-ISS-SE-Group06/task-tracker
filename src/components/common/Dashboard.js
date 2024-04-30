@@ -39,7 +39,7 @@ const Dashboard = () => {
                 setUserRows(data);
             } catch (error) {
                 console.error("Error fetching User list:", error);
-                setError("Failed to fetch users. Please try again later.");
+                setError(error);
             }
         };
         fetchUserData();
@@ -126,7 +126,7 @@ const Dashboard = () => {
    // const [signupUsername, setSignupUsername] = useState('');
    // const [signupName, setSignupName] = useState('');
     //const [signupEmail, setSignupEmail] = useState('');
-    const [userRole, setUserRole] = useState(role);
+    const [userRole] = useState(role);
    // const [error, setError] = useState('');
    // const [success, setSuccess] = useState('');
 
