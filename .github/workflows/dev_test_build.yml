@@ -100,6 +100,34 @@ jobs:
       #    token: ${{ secrets.GH_TOKEN }}
       #    timeout: 300000  # Time to timeout and cancel the deployment (5 minutes)
       #- run: echo ${{ steps.deployment.outputs.page_url }}
-
-
+##Deploy to digital ocean
+  build_docker_image:
+    needs: test_build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Codes
+        uses: actions/checkout@v4
+        with:
+          ref: dev
+      - name: Build Docker image
+        run: docker build -t task-tracker .
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Push Docker image to Docker Hub
+        run: docker push task-tracker
+  deploy_to_digitalocean:
+    needs: build_docker_image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install SSH Client
+        run: sudo apt-get install -y openssh-client
+      - name: Copy SSH private key
+        run: echo "${{ secrets.DIGITALOCEAN_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+      - name: Configure known hosts
+        run: ssh-keyscan -t rsa your-droplet-ip >> ~/.ssh/known_hosts
+      - name: Deploy Docker container to DigitalOcean Droplet
+        run: ssh -o StrictHostKeyChecking=no user@your-droplet-ip 'docker pull your-image-name && docker stop your-container-name && docker rm your-container-name && docker run -d --name your-container-name -p 80:80 your-image-name'
 
