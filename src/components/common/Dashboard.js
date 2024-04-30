@@ -11,6 +11,7 @@ import { UserManagementTbl } from "./UserManagementTbl";
 import { UserModal } from "./UserModal";
 import { LeaderDashBoardTbl } from "./LeaderDashBoardTbl";
 import { LeaderDashBoardModal } from "./LeaderDashBoardModal";
+import UserRegistration from '../../userreg/UserRegistration';
 import { fetchTaskList, deleteTask } from "../../services/taskService";
 import { fetchLeaderBoard } from "../../services/leaderService";
 import { fetchCommentList } from "../../services/commentService";
@@ -21,6 +22,10 @@ const Dashboard = () => {
     const accessToken = getCookieValue('authToken');
     const [modalOpen, setModalOpen] = useState(false);
     const [rows, setRows] = useState([]);
+    const [leaderrows, setLeaderRows] = useState([
+
+    ]);
+
     const [commentrows, setCommentRows] = useState([]);
     useEffect(() => {
 
@@ -46,25 +51,35 @@ const Dashboard = () => {
                 }
 
             }
+            if (view === 'userRegistration') {
+                try {
+                    console.log('hello1')
+                    const data = await fetchUserList();
+                    setLeaderRows(data);
+                } catch (error) {
+                    console.error("Error fetching users:", error);
+                    setError("Failed to fetch users. Please try again later.");
+                }
+
+            }
+
 
         };
+
         fetchData();
-    }, []);
+    }, [view]);
 
     const [usermodelOpen, setUserModalOpen] = useState(false);
     const [userrows, setUserRows] = useState([
+        { "userId": "000001", "userName": "Williamdou ", "Email": "william@nus.edu", "userRole": "Ordinary", "password": "1234567" }
+
     ]);
 
 
     const [userrowToEdit, setUserRowToEdit] = useState(null);
 
-    const handleUserDeleteRow = async (targetIndex) => {
-        try {
-            await deleteUser(userrows[targetIndex]); // Call deleteUser function
-            setUserRows(userrows.filter((_, idx) => idx !== targetIndex)); // Update rows after successful deletion
-        } catch (error) {
-            console.error("Error deleting User:", error);
-        }
+    const handleUserDeleteRow = (targetIndex) => {
+        setUserRows(userrows.filter((_, idx) => idx !== targetIndex));
     };
 
     const handleUserEditRow = (idx) => {
@@ -98,7 +113,7 @@ const Dashboard = () => {
             // Handle error (e.g., display an error message to the user)
         }
     };
-   
+
     const handleEditRow = async (idx) => {
         try {
             const data = await fetchCommentList(rows[idx].taskId);
@@ -128,27 +143,20 @@ const Dashboard = () => {
         handleLogout();
     }
 
-   // const [signupUsername, setSignupUsername] = useState('');
-   // const [signupName, setSignupName] = useState('');
-    //const [signupEmail, setSignupEmail] = useState('');
+    const [signupUsername, setSignupUsername] = useState('');
+    const [signupName, setSignupName] = useState('');
+    const [signupEmail, setSignupEmail] = useState('');
     const [userRole, setUserRole] = useState(role);
-   // const [error, setError] = useState('');
-   // const [success, setSuccess] = useState('');
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
 
 
 
     const [leadermodelOpen, setLeaderModalOpen] = useState(false);
-    const [leaderrows, setLeaderRows] = useState([
-        { "userId": "000001", "userName": "Williamdou ", "groupId": "0000001", "groupName": "NUS SE GROUP6", "taskRewardPoint": "100000" },
-        { "userId": "000001", "userName": "Williamdou ", "groupId": "0000001", "groupName": "NUS SE GROUP6", "taskRewardPoint": "100000" },
-        { "userId": "000001", "userName": "Williamdou ", "groupId": "0000001", "groupName": "NUS SE GROUP6", "taskRewardPoint": "100000" },
-        { "userId": "000001", "userName": "Williamdou ", "groupId": "0000001", "groupName": "NUS SE GROUP6", "taskRewardPoint": "100000" },
-        { "userId": "000001", "userName": "Williamdou ", "groupId": "0000001", "groupName": "NUS SE GROUP6", "taskRewardPoint": "100000" }
-
-    ]);
 
 
-    const [leaderrowToEdit, setLeaderRowToEdit,setLeaderModalOpen] = useState(null);
+
+    const [leaderrowToEdit, setLeaderRowToEdit] = useState(null);
 
     const handleLeaderDeleteRow = (targetIndex) => {
         setUserRows(leaderrows.filter((_, idx) => idx !== targetIndex));
