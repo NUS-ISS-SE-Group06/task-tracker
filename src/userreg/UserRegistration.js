@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Outlet, Link } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 import { signUp } from '../services/authService'; // Import the login function from authService
 import {getCookieValue} from '../services/cookieService';

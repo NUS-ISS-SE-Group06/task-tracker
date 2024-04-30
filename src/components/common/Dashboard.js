@@ -122,16 +122,16 @@ const Dashboard = () => {
         handleLogout();
     }
 
-    const [signupUsername, setSignupUsername] = useState('');
-    const [signupName, setSignupName] = useState('');
-    const [signupEmail, setSignupEmail] = useState('');
+   // const [signupUsername, setSignupUsername] = useState('');
+   // const [signupName, setSignupName] = useState('');
+    //const [signupEmail, setSignupEmail] = useState('');
     const [userRole, setUserRole] = useState(role);
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
+   // const [error, setError] = useState('');
+   // const [success, setSuccess] = useState('');
 
 
 
-    const [leadermodelOpen, setLeaderModalOpen] = useState(false);
+  //  const [leadermodelOpen, setLeaderModalOpen] = useState(false);
     const [leaderrows, setLeaderRows] = useState([
         { "userId": "000001", "userName": "Williamdou ", "groupId": "0000001", "groupName": "NUS SE GROUP6", "taskRewardPoint": "100000" },
         { "userId": "000001", "userName": "Williamdou ", "groupId": "0000001", "groupName": "NUS SE GROUP6", "taskRewardPoint": "100000" },
