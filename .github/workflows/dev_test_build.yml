@@ -88,7 +88,7 @@ jobs:
       - name: Build Docker image
         run: docker build -t task-tracker .
       - name: Login to Docker Hub and push
-        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_ACCESS_TOKEN }}  docker buildx build --platform linux/amd64,linux/arm64 -t $DOCKER_HUB_USERNAME/task-tracker:latest --push .
+        run: format('docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_ACCESS_TOKEN }}  docker buildx build --platform linux/amd64,linux/arm64 -t $DOCKER_HUB_USERNAME/task-tracker:latest --push .')
       # - name: Push Docker image to Docker Hub
       #   run: docker push task-tracker .
   deploy_to_digitalocean:
