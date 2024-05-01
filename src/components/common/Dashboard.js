@@ -46,7 +46,7 @@ const Dashboard = () => {
         };
         fetchUserData();
 
-    }, [error]);
+    }, []);
 
     const [usermodelOpen, setUserModalOpen] = useState(false);
     const [userrows, setUserRows] = useState([
