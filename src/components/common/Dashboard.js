@@ -19,7 +19,7 @@ const Dashboard = () => {
     const accessToken = getCookieValue('authToken');
     const [modalOpen, setModalOpen] = useState(false);
     const [rows, setRows] = useState([]);
-    const [error, setError] = useState(null);
+    //const [error, setError] = useState(null);
     const [commentrows, setCommentRows] = useState([]);
     useEffect(() => {
         const fetchData = async () => {
