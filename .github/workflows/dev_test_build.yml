@@ -115,10 +115,10 @@ jobs:
         uses: docker/login-action@v1
         with:
       - name: Push Docker image to Docker Hub
-          run: docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}" && docker push "${DOCKER_USERNAME}/task-tracker"
-          ecr: auto
-          logout: true
-          debug: true
+        run: docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}" && docker push "${DOCKER_USERNAME}/task-tracker"
+        ecr: auto
+        logout: true
+        debug: true
   deploy_to_digitalocean:
     needs: build_docker_image
     runs-on: ubuntu-latest
