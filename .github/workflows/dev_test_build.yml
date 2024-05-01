@@ -128,6 +128,8 @@ jobs:
         run: echo "${{ secrets.DIGITALOCEAN_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
       - name: Configure known hosts
         run: ssh-keyscan -t rsa 178.128.110.74 >> ~/.ssh/known_hosts
+      - name: Get Container Name
+        run: echo "CONTAINER_NAME=$(docker ps -q --filter name=your-container-prefix)" >> $GITHUB_ENV
       - name: Deploy Docker container to DigitalOcean Droplet
-        run: ssh -o StrictHostKeyChecking=no root@178.128.110.74 'docker pull task-tracker && docker stop task-tracker && docker rm task-tracker && docker run -d --name task-tracker -p 80:80 task-tracker'
+        run: ssh -o StrictHostKeyChecking=no root@178.128.110.74 'docker pull task-tracker && docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME && docker run -d --name $CONTAINER_NAME -p 80:80 task-tracker'
 
