@@ -127,7 +127,9 @@ jobs:
       - name: Copy SSH private key
         run: echo "${{ secrets.DIGITALOCEAN_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
       - name: Configure known hosts
-        run: ssh-keyscan -t rsa your-droplet-ip >> ~/.ssh/known_hosts
+        run: ssh-keyscan -t rsa 178.128.110.74 >> ~/.ssh/known_hosts
+      - name: Get Container Name
+        run: echo "CONTAINER_NAME=$(docker ps -q --filter name=your-container-prefix)" >> $GITHUB_ENV
       - name: Deploy Docker container to DigitalOcean Droplet
-        run: ssh -o StrictHostKeyChecking=no user@your-droplet-ip 'docker pull your-image-name && docker stop your-container-name && docker rm your-container-name && docker run -d --name your-container-name -p 80:80 your-image-name'
+        run: ssh -o StrictHostKeyChecking=no root@178.128.110.74 'docker pull task-tracker && docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME && docker run -d --name $CONTAINER_NAME -p 80:80 task-tracker'
 
