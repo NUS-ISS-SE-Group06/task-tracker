@@ -19,7 +19,7 @@ const Dashboard = () => {
     const accessToken = getCookieValue('authToken');
     const [modalOpen, setModalOpen] = useState(false);
     const [rows, setRows] = useState([]);
-    const [error, setError] = useState(null);
+    //const [error, setError] = useState(null);
     const [commentrows, setCommentRows] = useState([]);
     useEffect(() => {
         const fetchData = async () => {
@@ -28,7 +28,7 @@ const Dashboard = () => {
                 setRows(data);
             } catch (error) {
                 console.error("Error fetching tasks:", error);
-                setError("Failed to fetch tasks. Please try again later.");
+            //    setError("Failed to fetch tasks. Please try again later.");
             }
         };
         fetchData();
@@ -39,7 +39,7 @@ const Dashboard = () => {
                 setUserRows(data);
             } catch (error) {
                 console.error("Error fetching User list:", error);
-                setError(error);
+               // setError(error);
             }
         };
         fetchUserData();
@@ -100,7 +100,7 @@ const Dashboard = () => {
             setCommentRows(data);
         } catch (error) {
             console.error("Error fetching comment list:", error);
-            setError("Failed to fetch comment list. Please try again later.");
+          //  setError("Failed to fetch comment list. Please try again later.");
         }
         setRowToEdit(idx);
         setModalOpen(true);
