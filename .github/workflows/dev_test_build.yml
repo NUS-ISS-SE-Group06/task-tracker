@@ -117,7 +117,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Push Docker image to Docker Hub
-        run: docker push task-tracker
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/task-tracker
   deploy_to_digitalocean:
     needs: build_docker_image
     runs-on: ubuntu-latest
