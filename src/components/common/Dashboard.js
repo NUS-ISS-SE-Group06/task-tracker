@@ -19,16 +19,16 @@ const Dashboard = () => {
     const accessToken = getCookieValue('authToken');
     const [modalOpen, setModalOpen] = useState(false);
     const [rows, setRows] = useState([]);
-    //const [error, setError] = useState(null);
+    const [error, setError] = useState(null);
     const [commentrows, setCommentRows] = useState([]);
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const data = await fetchTaskList();
                 setRows(data);
-            } catch (error) {
-                console.error("Error fetching tasks:", error);
+            } catch (e) {
                 setError("Failed to fetch tasks. Please try again later.");
+                console.error("Error fetching tasks:", e);        
             }
         };
         fetchData();
@@ -37,14 +37,14 @@ const Dashboard = () => {
             try {
                 const data = await fetchUserList();
                 setUserRows(data);
-            } catch (error) {
-                console.error("Error fetching User list:", error);
-                setError(error);
+            } catch (e) {
+                setError(e);
+                console.error("Error fetching User list:", e);      
             }
         };
         fetchUserData();
 
-    }, []);
+    }, [error]);
 
     const [usermodelOpen, setUserModalOpen] = useState(false);
     const [userrows, setUserRows] = useState([
@@ -57,8 +57,8 @@ const Dashboard = () => {
         try {
             await deleteUser(userrows[targetIndex]); // Call deleteUser function
             setUserRows(userrows.filter((_, idx) => idx !== targetIndex)); // Update rows after successful deletion
-        } catch (error) {
-            console.error("Error deleting User:", error);
+        } catch (e) {
+            console.error("Error deleting User:", e);
         }
     };
 
@@ -88,8 +88,8 @@ const Dashboard = () => {
         try {
             await deleteTask(rows[targetIndex].taskId); // Call deleteTask function
             setRows(rows.filter((_, idx) => idx !== targetIndex)); // Update rows after successful deletion
-        } catch (error) {
-            console.error("Error deleting task:", error);
+        } catch (e) {
+            console.error("Error deleting task:", e);
             // Handle error (e.g., display an error message to the user)
         }
     };
@@ -98,8 +98,8 @@ const Dashboard = () => {
         try {
             const data = await fetchCommentList(rows[idx].taskId);
             setCommentRows(data);
-        } catch (error) {
-            console.error("Error fetching comment list:", error);
+        } catch (e) {
+            console.error("Error fetching comment list:", e);
             setError("Failed to fetch comment list. Please try again later.");
         }
         setRowToEdit(idx);
