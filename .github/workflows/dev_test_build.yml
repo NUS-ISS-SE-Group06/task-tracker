@@ -99,7 +99,7 @@ jobs:
         env:
           DIGITALOCEAN_SSH_PRIVATE_KEY: ${{ secrets.DIGITALOCEAN_SSH_PRIVATE_KEY }}
           DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
-          CONTAINER_NAME: "$DOCKER_HUB_USERNAME/task-tracker:latest" # Change this to your container name
+          CONTAINER_NAME: "$DOCKER_HUB_USERNAME/task-tracker" # Change this to your container name
         run: |
             mkdir -p ~/.ssh
             echo "$DIGITALOCEAN_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
