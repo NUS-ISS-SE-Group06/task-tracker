@@ -95,13 +95,16 @@ jobs:
     needs: build_docker_image
     runs-on: ubuntu-latest
     steps:
-      - name: Install SSH Client
-        run: sudo apt-get install -y openssh-client
-      - name: Copy SSH private key
-        run: echo "${{ secrets.DIGITALOCEAN_SSH_PRIVATE_KEY }}" > $HOME/.ssh/id_rsa && chmod 600 $HOME/.ssh/id_rsa
-      - name: Get Container Name
-        run: echo "CONTAINER_NAME=$(docker ps --format '{{.Names}}')" >> $GITHUB_ENV
-      - name: Configure known hosts
-        run: ssh-keyscan -t rsa 178.128.110.74 >> $HOME/.ssh/known_hosts
-      - name: Deploy Docker container to DigitalOcean Droplet
-        run: ssh -o StrictHostKeyChecking=no root@178.128.110.74 'docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/task-tracker:latest && docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME && docker run -d --name $CONTAINER_NAME -p 80:80 ${{ secrets.DOCKER_HUB_USERNAME }}/task-tracker:latest'
+      - name: Deploy to DigitalOcean
+        env:
+          DIGITALOCEAN_SSH_PRIVATE_KEY: ${{ secrets.DIGITALOCEAN_SSH_PRIVATE_KEY }}
+          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          CONTAINER_NAME: "task-tracker" # Change this to your container name
+        run: |
+          mkdir -p ~/.ssh
+          echo "$DIGITALOCEAN_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -t rsa 178.128.110.74 >> ~/.ssh/known_hosts
+          docker pull $DOCKER_HUB_USERNAME/task-tracker:latest
+          ssh -o StrictHostKeyChecking=no root@159.65.128.176 'docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME'
+          ssh -o StrictHostKeyChecking=no root@159.65.128.176 'docker run -d --name $CONTAINER_NAME -p 80:80 $DOCKER_HUB_USERNAME/task-tracker:latest'
