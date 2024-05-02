@@ -99,13 +99,12 @@ jobs:
         env:
           DIGITALOCEAN_SSH_PRIVATE_KEY: ${{ secrets.DIGITALOCEAN_SSH_PRIVATE_KEY }}
           DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
-          CONTAINER_NAME: "$DOCKER_HUB_USERNAME/task-tracker" # Change this to your container name
+          CONTAINER_NAME: "task-tracker" # Change this to your container name
         run: |
-            mkdir -p ~/.ssh
-            echo "$DIGITALOCEAN_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-            chmod 600 ~/.ssh/id_rsa
-            ssh-keyscan -t rsa 165.22.100.234 >> ~/.ssh/known_hosts
-              
-            docker pull $DOCKER_HUB_USERNAME/task-tracker:latest 
-            ssh -o StrictHostKeyChecking=no root@165.22.100.234 "docker build -t $DOCKER_HUB_USERNAME/task-tracker:latest"
-            ssh -o StrictHostKeyChecking=no root@165.22.100.234 "docker run -d --name $CONTAINER_NAME -p 80:80 $DOCKER_HUB_USERNAME/task-tracker:latest"
+          mkdir -p ~/.ssh
+          echo "$DIGITALOCEAN_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -t rsa 165.22.100.234 >> ~/.ssh/known_hosts
+          
+          docker pull $DOCKER_HUB_USERNAME/task-tracker:latest 
+          ssh -o StrictHostKeyChecking=no root@165.22.100.234 "docker run -d --name $CONTAINER_NAME -p 80:80 $DOCKER_HUB_USERNAME/task-tracker:latest"
