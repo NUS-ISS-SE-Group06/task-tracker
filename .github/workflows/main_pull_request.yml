@@ -66,7 +66,50 @@ jobs:
         uses: sonarsource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  build_docker_image:
+    if: github.ref == 'refs/heads/main'  # execution when code merge: dev -> main
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Codes
+        uses: actions/checkout@v4
+        with:
+          ref: dev
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/task-tracker:latest .
+      - name: Login to Docker Hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_ACCESS_TOKEN }}
+      - name: Push Docker image to Docker Hub
+        run: docker push  ${{ secrets.DOCKER_HUB_USERNAME }}/task-tracker:latest
+
+  deploy_to_digitalocean:
+    if: github.ref == 'refs/heads/main'  # execution when code merge: dev -> main
+    needs: build_docker_image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to DigitalOcean
+        env:
+          DIGITALOCEAN_SSH_PRIVATE_KEY: ${{ secrets.DIGITALOCEAN_SSH_PRIVATE_KEY }}
+          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          CONTAINER_NAME: "task-tracker" # Change this to your container name
+        run: |
+          mkdir -p ~/.ssh
+          echo "$DIGITALOCEAN_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -t rsa 165.22.100.234 >> ~/.ssh/known_hosts
+          
+          # Stop the container if it is running
+          ssh -o StrictHostKeyChecking=no root@165.22.100.234 "docker stop $CONTAINER_NAME || true"
+          
+          # Remove the container if it exists
+          ssh -o StrictHostKeyChecking=no root@165.22.100.234 "docker rm -f $CONTAINER_NAME || true"
+          
+          # Pull the latest image from Docker Hub
+          docker pull $DOCKER_HUB_USERNAME/task-tracker:latest 
+          
+          # Run the container
+          ssh -o StrictHostKeyChecking=no root@165.22.100.234 "docker run -d --name $CONTAINER_NAME -p 3000:3000 $DOCKER_HUB_USERNAME/task-tracker:latest"
+  
           
   prd_deploy:
     if: github.ref == 'refs/heads/main'  # execution when code merge: dev -> main
