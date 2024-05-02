@@ -105,6 +105,12 @@ jobs:
           echo "$DIGITALOCEAN_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -t rsa 165.22.100.234 >> ~/.ssh/known_hosts
-          
+        # Stop the container if it is running
+          ssh -o StrictHostKeyChecking=no root@165.22.100.234 "docker stop $CONTAINER_NAME || true"
+        
+        # Remove the container if it exists
+          ssh -o StrictHostKeyChecking=no root@165.22.100.234 "docker rm -f $CONTAINER_NAME || true"
+        
+        # Pull the latest image from Docker Hub
           docker pull $DOCKER_HUB_USERNAME/task-tracker:latest 
           ssh -o StrictHostKeyChecking=no root@165.22.100.234 "docker run -d --name $CONTAINER_NAME -p 3000:3000 $DOCKER_HUB_USERNAME/task-tracker:latest"
