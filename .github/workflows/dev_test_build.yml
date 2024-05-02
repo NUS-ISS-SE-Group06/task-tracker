@@ -107,5 +107,5 @@ jobs:
             ssh-keyscan -t rsa 165.22.100.234 >> ~/.ssh/known_hosts
               
             docker pull $DOCKER_HUB_USERNAME/task-tracker:latest 
-            ssh -o StrictHostKeyChecking=no root@165.22.100.234 "docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME"
+            ssh -o StrictHostKeyChecking=no root@165.22.100.234 "docker build -t $DOCKER_HUB_USERNAME/task-tracker:latest"
             ssh -o StrictHostKeyChecking=no root@165.22.100.234 "docker run -d --name $CONTAINER_NAME -p 80:80 $DOCKER_HUB_USERNAME/task-tracker:latest"
