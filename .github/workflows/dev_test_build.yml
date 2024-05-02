@@ -98,7 +98,9 @@ jobs:
       - name: Install SSH Client
         run: sudo apt-get install -y openssh-client
       - name: Copy SSH private key
-        run: echo "/root/.ssh/authorized_keys" > /root/.ssh/authorized_keys && chmod 600 /root/.ssh/authorized_keys
+        run: echo "${{ secrets.DIGITALOCEAN_SSH_PRIVATE_KEY }}" > $HOME/.ssh/id_rsa && chmod 600 $HOME/.ssh/id_rsa
+      - name: Create SSH directory
+        run: mkdir -p $HOME/.ssh
       - name: Configure known hosts
         run: ssh-keyscan -t rsa 178.128.110.74 >> $HOME/.ssh/known_hosts
       - name: Get Container Name
