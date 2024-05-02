@@ -99,11 +99,9 @@ jobs:
         run: sudo apt-get install -y openssh-client
       - name: Copy SSH private key
         run: echo "${{ secrets.DIGITALOCEAN_SSH_PRIVATE_KEY }}" > $HOME/.ssh/id_rsa && chmod 600 $HOME/.ssh/id_rsa
-      - name: Create SSH directory
-        run: mkdir -p $HOME/.ssh
-      - name: Configure known hosts
-        run: ssh-keyscan -t rsa 178.128.110.74 >> $HOME/.ssh/known_hosts
       - name: Get Container Name
         run: echo "CONTAINER_NAME=$(docker ps --format '{{.Names}}')" >> $GITHUB_ENV
+      - name: Configure known hosts
+        run: ssh-keyscan -t rsa 178.128.110.74 >> $HOME/.ssh/known_hosts
       - name: Deploy Docker container to DigitalOcean Droplet
         run: ssh -o StrictHostKeyChecking=no root@178.128.110.74 'docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/task-tracker:latest && docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME && docker run -d --name $CONTAINER_NAME -p 80:80 ${{ secrets.DOCKER_HUB_USERNAME }}/task-tracker:latest'
