@@ -115,6 +115,9 @@ jobs:
           # Remove the container if it exists
           ssh -o StrictHostKeyChecking=no root@165.22.100.234 "docker rm -f $CONTAINER_NAME || true"
           
+          # Remove the image if it exists
+          ssh -o StrictHostKeyChecking=no root@165.22.100.234 "docker rmi -f $DOCKER_HUB_USERNAME/task-tracker:latest || true"
+
           # Pull the latest image from Docker Hub
           docker pull $DOCKER_HUB_USERNAME/task-tracker:latest 
           
