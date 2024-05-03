@@ -117,33 +117,33 @@ jobs:
           ssh -o StrictHostKeyChecking=no root@165.22.100.234 "docker run -d --name $CONTAINER_NAME -p 3000:3000 $DOCKER_HUB_USERNAME/task-tracker:latest"
   
           
-  prd_deploy:
-    if: github.ref == 'refs/heads/dev'
-    needs: deploy_to_digitalocean
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest  
-    steps:
-      - name: Checkout Source Codes
-        uses: actions/checkout@v4
-        with: 
-          ref: dev
-      - name: Use Node.js   
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14.x'
-          cache: 'npm'
-      - name: Install dependencies
-        run: npm ci
-      - name: Build project
-        run: npm run build --if-present
-      - name: List Contents of build Directory
-        run: ls -R build
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: build
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+  # prd_deploy:
+  #   if: github.ref == 'refs/heads/dev'
+  #   needs: deploy_to_digitalocean
+  #   environment:
+  #     name: github-pages
+  #     url: ${{ steps.deployment.outputs.page_url }}
+  #   runs-on: ubuntu-latest  
+  #   steps:
+  #     - name: Checkout Source Codes
+  #       uses: actions/checkout@v4
+  #       with: 
+  #         ref: dev
+  #     - name: Use Node.js   
+  #       uses: actions/setup-node@v2
+  #       with:
+  #         node-version: '14.x'
+  #         cache: 'npm'
+  #     - name: Install dependencies
+  #       run: npm ci
+  #     - name: Build project
+  #       run: npm run build --if-present
+  #     - name: List Contents of build Directory
+  #       run: ls -R build
+  #     - name: Upload Pages artifact
+  #       uses: actions/upload-pages-artifact@v3
+  #       with:
+  #         path: build
+  #     - name: Deploy to GitHub Pages
+  #       id: deployment
+  #       uses: actions/deploy-pages@v4
