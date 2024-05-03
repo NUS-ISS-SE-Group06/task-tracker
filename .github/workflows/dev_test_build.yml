@@ -123,3 +123,35 @@ jobs:
           
           # Run the container
           ssh -o StrictHostKeyChecking=no root@165.22.100.234 "docker run -d --name $CONTAINER_NAME -p 3000:3000 $DOCKER_HUB_USERNAME/task-tracker:latest"
+
+  deploy_to_digitalocean_dr:
+    needs: build_docker_image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to DigitalOcean
+        env:
+          DIGITALOCEAN_SSH_PRIVATE_KEY: ${{ secrets.DIGITALOCEAN_DR_SSH_PRIVATE_KEY }}
+          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          CONTAINER_NAME: "task-tracker" # Change this to your container name
+        run: |
+          mkdir -p ~/.ssh
+          echo "$DIGITALOCEAN_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -t rsa 128.199.134.155 >> ~/.ssh/known_hosts
+                  
+          # Stop the container if it is running
+          ssh -o StrictHostKeyChecking=no root@128.199.134.155 "docker stop $CONTAINER_NAME || true"
+                  
+          # Remove the container if it exists
+          ssh -o StrictHostKeyChecking=no root@128.199.134.155 "docker rm -f $CONTAINER_NAME || true"
+                  
+          # Remove the image if it exists
+          ssh -o StrictHostKeyChecking=no root@128.199.134.155 "docker rmi -f $DOCKER_HUB_USERNAME/task-tracker:latest || true"
+        
+          # Pull the latest image from Docker Hub
+          docker pull $DOCKER_HUB_USERNAME/task-tracker:latest 
+                  
+          # Run the container
+          ssh -o StrictHostKeyChecking=no root@128.199.134.155 "docker run -d --name $CONTAINER_NAME -p 3000:3000 $DOCKER_HUB_USERNAME/task-tracker:latest"
+        
+        
