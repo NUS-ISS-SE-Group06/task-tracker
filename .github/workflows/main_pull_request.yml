@@ -31,8 +31,8 @@ jobs:
         run: echo The PR was branch synchronization code merged from main -> dev. No further step.
           
   main_build:
-    if: github.ref == 'refs/heads/main'
-    needs: [branch_synch]
+    if: github.ref == 'refs/heads/dev'
+    needs: branch_synch
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -55,8 +55,8 @@ jobs:
         run: CI=true npm test
           
   code_scan:
-    if: github.ref == 'refs/heads/main'
-    needs: [main_build]
+    if: github.ref == 'refs/heads/dev'
+    needs: main_build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Source Codes
@@ -71,8 +71,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   
   build_docker_image:
-    if: github.ref == 'refs/heads/main'
-    needs: [code_scan]
+    if: github.ref == 'refs/heads/dev'
+    needs: code_scan
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Source Codes
@@ -86,8 +86,8 @@ jobs:
           docker push  ${{ secrets.DOCKER_HUB_USERNAME }}/task-tracker:latest
 
   deploy_to_digitalocean:
-    if: github.ref == 'refs/heads/main'
-    needs: [build_docker_image]
+    if: github.ref == 'refs/heads/dev'
+    needs: build_docker_image
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to DigitalOcean
@@ -118,8 +118,8 @@ jobs:
   
           
   prd_deploy:
-    if: github.ref == 'refs/heads/main'
-    needs: [deploy_to_digitalocean]
+    if: github.ref == 'refs/heads/dev'
+    needs: deploy_to_digitalocean
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
