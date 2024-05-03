@@ -85,7 +85,6 @@ jobs:
   deploy_to_digitalocean:
     if: github.ref == 'refs/heads/main'
     needs: build_docker_image
-    needs: build_docker_image
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to DigitalOcean
