@@ -38,7 +38,7 @@ const Dashboard = () => {
                     setRows(data);
                 } catch (error) {
                     console.error("Error fetching tasks:", error);
-                    setError("Failed to fetch tasks. Please try again later.");
+                //    setError("Failed to fetch tasks. Please try again later.");
                 }
               
             }
@@ -49,7 +49,7 @@ const Dashboard = () => {
                     setLeaderRows(data);
                 } catch (error) {
                     console.error("Error fetching tasks:", error);
-                    setError("Failed to fetch tasks. Please try again later.");
+             //       setError("Failed to fetch tasks. Please try again later.");
                 }
 
             }
@@ -60,7 +60,7 @@ const Dashboard = () => {
                     setUserRows(data);
                 } catch (error) {
                     console.error("Error fetching users:", error);
-                    setError("Failed to fetch users. Please try again later.");
+        //            setError("Failed to fetch users. Please try again later.");
                 }
 
             }
