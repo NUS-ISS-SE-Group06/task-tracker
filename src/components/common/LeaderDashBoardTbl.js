@@ -1,9 +1,9 @@
-import React,{ useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { BsFillTrashFill, BsFillPencilFill, BsPlus } from "react-icons/bs";
 
 import "./Table.css";
-import {  LeaderDashBoardModal } from "./LeaderDashBoardModal";
+import { LeaderDashBoardModal } from "./LeaderDashBoardModal";
 
 
 export const LeaderDashBoardTbl = ({ rows, deleteRow, editRow }) => {
@@ -12,7 +12,7 @@ export const LeaderDashBoardTbl = ({ rows, deleteRow, editRow }) => {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
     const filteredRows = rows.filter(row =>
-        row.userName.toLowerCase().includes(searchTerm.toLowerCase())
+        row.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const handleAddNew = () => {
@@ -41,6 +41,7 @@ export const LeaderDashBoardTbl = ({ rows, deleteRow, editRow }) => {
             <table className="table">
                 <thead>
                     <tr>
+                        <th>ID</th>
                         <th>User ID</th>
                         <th className="expand">User Name</th>
                         <th>Group ID</th>
@@ -55,8 +56,9 @@ export const LeaderDashBoardTbl = ({ rows, deleteRow, editRow }) => {
 
                         return (
                             <tr key={idx}>
+                                <td>{row.id}</td>
                                 <td>{row.userId}</td>
-                                <td className="expand">{row.userName}</td>
+                                <td className="expand">{row.name}</td>
                                 <td>{row.groupId}</td>
                                 <td>{row.groupName}</td>
                                 <td>{row.taskRewardPoint}</td>

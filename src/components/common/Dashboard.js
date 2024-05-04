@@ -12,46 +12,77 @@ import { UserModal } from "./UserModal";
 import { LeaderDashBoardTbl } from "./LeaderDashBoardTbl";
 import { LeaderDashBoardModal } from "./LeaderDashBoardModal";
 import { fetchTaskList, deleteTask } from "../../services/taskService";
+import { fetchLeaderBoard } from "../../services/leaderService";
 import { fetchCommentList } from "../../services/commentService";
 import { fetchUserList, deleteUser } from "../../services/userRegistrationService";
 
 const Dashboard = () => {
+    const [view, setView] = useState('table'); // 'table' is the default view
     const accessToken = getCookieValue('authToken');
     const [modalOpen, setModalOpen] = useState(false);
     const [rows, setRows] = useState([]);
-    //const [error, setError] = useState(null);
+
+    const [leaderrows, setLeaderRows] = useState([
+
+    ]);
+
+
+
     const [commentrows, setCommentRows] = useState([]);
     useEffect(() => {
+
         const fetchData = async () => {
+
+            if (view === 'table') {
+                try {
+                    const data = await fetchTaskList();
+                    setRows(data);
+                } catch (error) {
+                    console.error("Error fetching tasks:", error);
+                    setError("Failed to fetch tasks. Please try again later.");
+                }
+              
+
             try {
                 const data = await fetchTaskList();
                 setRows(data);
             } catch (error) {
                 console.error("Error fetching tasks:", error);
             //    setError("Failed to fetch tasks. Please try again later.");
+
             }
+            if (view === 'leader') {
+                try {
+                    console.log('hello1')
+                    const data = await fetchLeaderBoard();
+                    setLeaderRows(data);
+                } catch (error) {
+                    console.error("Error fetching tasks:", error);
+                    setError("Failed to fetch tasks. Please try again later.");
+                }
+
+            }
+            if (view === 'userRegistration') {
+                try {
+                    console.log('hello1')
+                    const data = await fetchUserList();
+                    setUserRows(data);
+                } catch (error) {
+                    console.error("Error fetching users:", error);
+                    setError("Failed to fetch users. Please try again later.");
+                }
+
+            }
+
+
         };
+
         fetchData();
-
-        const fetchUserData = async () => {
-            try {
-                const data = await fetchUserList();
-                setUserRows(data);
-
-            } catch (error) {
-                console.error("Error fetching User list:", error);
-               // setError(error);
-
-            }
-        };
-        fetchUserData();
-
-    }, []);
+    }, [view]);
 
     const [usermodelOpen, setUserModalOpen] = useState(false);
     const [userrows, setUserRows] = useState([
     ]);
-
 
     const [userrowToEdit, setUserRowToEdit] = useState(null);
 
@@ -62,6 +93,7 @@ const Dashboard = () => {
         } catch (e) {
             console.error("Error deleting User:", e);
         }
+
     };
 
     const handleUserEditRow = (idx) => {
@@ -82,7 +114,7 @@ const Dashboard = () => {
             );
     };
 
-    const [view, setView] = useState('table'); // 'table' is the default view
+   
 
     const [rowToEdit, setRowToEdit] = useState(null);
 
@@ -95,7 +127,7 @@ const Dashboard = () => {
             // Handle error (e.g., display an error message to the user)
         }
     };
-   
+
     const handleEditRow = async (idx) => {
         try {
             const data = await fetchCommentList(rows[idx].taskId);
@@ -127,6 +159,8 @@ const Dashboard = () => {
         handleLogout();
     }
 
+
+
    // const [signupUsername, setSignupUsername] = useState('');
    // const [signupName, setSignupName] = useState('');
     //const [signupEmail, setSignupEmail] = useState('');
@@ -136,18 +170,12 @@ const Dashboard = () => {
 
 
 
-  //  const [leadermodelOpen, setLeaderModalOpen] = useState(false);
-    const [leaderrows, setLeaderRows] = useState([
-        { "userId": "000001", "userName": "Williamdou ", "groupId": "0000001", "groupName": "NUS SE GROUP6", "taskRewardPoint": "100000" },
-        { "userId": "000001", "userName": "Williamdou ", "groupId": "0000001", "groupName": "NUS SE GROUP6", "taskRewardPoint": "100000" },
-        { "userId": "000001", "userName": "Williamdou ", "groupId": "0000001", "groupName": "NUS SE GROUP6", "taskRewardPoint": "100000" },
-        { "userId": "000001", "userName": "Williamdou ", "groupId": "0000001", "groupName": "NUS SE GROUP6", "taskRewardPoint": "100000" },
-        { "userId": "000001", "userName": "Williamdou ", "groupId": "0000001", "groupName": "NUS SE GROUP6", "taskRewardPoint": "100000" }
 
-    ]);
+    const [leadermodelOpen, setLeaderModalOpen] = useState(false);
 
 
-    const [leaderrowToEdit, setLeaderRowToEdit,setLeaderModalOpen] = useState(null);
+
+    const [leaderrowToEdit, setLeaderRowToEdit] = useState(null);
 
     const handleLeaderDeleteRow = (targetIndex) => {
         setUserRows(leaderrows.filter((_, idx) => idx !== targetIndex));
@@ -194,7 +222,7 @@ const Dashboard = () => {
                                 }}
                                 onSubmit={handleSubmit}
                                 userRole={userRole}
-                                defaultValue={rowToEdit !== null ? {row: rows[rowToEdit], commentrows } :null }
+                                defaultValue={rowToEdit !== null ? { row: rows[rowToEdit], commentrows } : null}
                                 accessToken={accessToken}
                             />
 
@@ -215,8 +243,10 @@ const Dashboard = () => {
                                     setUserModalOpen(false);
                                     setUserRowToEdit(null);
                                 }}
-                                onSubmit={handleUserSubmit}
-                                defaultValue={userrowToEdit !== null && userrows[userrowToEdit]}
+                                //onSubmit={handleUserSubmit}
+                                onSubmit1={handleUserSubmit}
+                                defaultValue={userrowToEdit !== null ? userrows[userrowToEdit] : undefined}
+                               // defaultValue={userrowToEdit !== null && userrows[userrowToEdit]}
                             />
                         )}
 
@@ -229,9 +259,9 @@ const Dashboard = () => {
 
                     <>
 
-                        <LeaderDashBoardTbl rows={userrows} deleteRow={handleLeaderDeleteRow} editRow={handleLeaderEditRow} />
+                        <LeaderDashBoardTbl rows={leaderrows} deleteRow={handleLeaderDeleteRow} editRow={handleLeaderEditRow} />
 
-                        {usermodelOpen && (
+                        {leadermodelOpen && (
                             <LeaderDashBoardModal
                                 closeModal={() => {
                                     setLeaderModalOpen(false);
