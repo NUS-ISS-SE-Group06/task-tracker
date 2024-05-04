@@ -100,7 +100,7 @@ export const Modal = ({ closeModal, onSubmit, defaultValue, userRole }) => {
        let selectedUser = userList.find(user => user.userId === value);
       selectedUser = 1;
       console.log("Selected user ID :", selectedUser);
-      let userId = selectedUser ? selectedUser.userId : "";
+     // let userId = selectedUser ? selectedUser.userId : "";
 
  
    
