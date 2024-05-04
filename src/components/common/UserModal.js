@@ -66,6 +66,7 @@ export const UserModal = ({ closeModal, onSubmit, defaultValue }) => {
         const response = await createUserInfo(userRegData);
         if (response !== null && response.error === "") {
            // onSubmit(formState, response);
+           onSubmit(formState);
             closeModal();
         } else {
            setErrors(response.error);
