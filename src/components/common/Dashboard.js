@@ -11,7 +11,6 @@ import { UserManagementTbl } from "./UserManagementTbl";
 import { UserModal } from "./UserModal";
 import { LeaderDashBoardTbl } from "./LeaderDashBoardTbl";
 import { LeaderDashBoardModal } from "./LeaderDashBoardModal";
-import UserRegistration from '../../userreg/UserRegistration';
 import { fetchTaskList, deleteTask } from "../../services/taskService";
 import { fetchLeaderBoard } from "../../services/leaderService";
 import { fetchCommentList } from "../../services/commentService";
@@ -55,7 +54,7 @@ const Dashboard = () => {
                 try {
                     console.log('hello1')
                     const data = await fetchUserList();
-                    setLeaderRows(data);
+                    setUserRows(data);
                 } catch (error) {
                     console.error("Error fetching users:", error);
                     setError("Failed to fetch users. Please try again later.");
@@ -71,10 +70,7 @@ const Dashboard = () => {
 
     const [usermodelOpen, setUserModalOpen] = useState(false);
     const [userrows, setUserRows] = useState([
-        { "userId": "000001", "userName": "Williamdou ", "Email": "william@nus.edu", "userRole": "Ordinary", "password": "1234567" }
-
     ]);
-
 
     const [userrowToEdit, setUserRowToEdit] = useState(null);
 
@@ -224,8 +220,10 @@ const Dashboard = () => {
                                     setUserModalOpen(false);
                                     setUserRowToEdit(null);
                                 }}
-                                onSubmit={handleUserSubmit}
-                                defaultValue={userrowToEdit !== null && userrows[userrowToEdit]}
+                                //onSubmit={handleUserSubmit}
+                                onSubmit1={handleUserSubmit}
+                                defaultValue={userrowToEdit !== null ? userrows[userrowToEdit] : undefined}
+                               // defaultValue={userrowToEdit !== null && userrows[userrowToEdit]}
                             />
                         )}
 

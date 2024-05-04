@@ -36,6 +36,15 @@ export const UserModal = ({ closeModal, onSubmit, defaultValue }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    console.log('onSubmit type:', typeof onSubmit);  // Debugging
+    console.log('onSubmit value:', onSubmit);        // Debugging
+
+    if (typeof onSubmit === 'function') {
+        onSubmit(formState);
+    } else {
+        console.error('onSubmit is not a function', onSubmit);
+    }
+
     console.log("Submitting User Registration form");
     if (!validateForm()) return;
 
@@ -56,7 +65,7 @@ export const UserModal = ({ closeModal, onSubmit, defaultValue }) => {
         userRegData.userId = 0;
         const response = await createUserInfo(userRegData);
         if (response !== null && response.error === "") {
-            onSubmit(formState, response);
+           // onSubmit(formState, response);
             closeModal();
         } else {
            setErrors(response.error);
