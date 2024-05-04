@@ -32,7 +32,6 @@ const Dashboard = () => {
     useEffect(() => {
 
         const fetchData = async () => {
-
             if (view === 'table') {
                 try {
                     const data = await fetchTaskList();
@@ -42,14 +41,6 @@ const Dashboard = () => {
                     setError("Failed to fetch tasks. Please try again later.");
                 }
               
-
-            try {
-                const data = await fetchTaskList();
-                setRows(data);
-            } catch (error) {
-                console.error("Error fetching tasks:", error);
-            //    setError("Failed to fetch tasks. Please try again later.");
-
             }
             if (view === 'leader') {
                 try {
