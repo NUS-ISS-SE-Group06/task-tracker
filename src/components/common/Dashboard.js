@@ -21,14 +21,18 @@ const Dashboard = () => {
     const accessToken = getCookieValue('authToken');
     const [modalOpen, setModalOpen] = useState(false);
     const [rows, setRows] = useState([]);
+
     const [leaderrows, setLeaderRows] = useState([
 
     ]);
+
+
 
     const [commentrows, setCommentRows] = useState([]);
     useEffect(() => {
 
         const fetchData = async () => {
+
             if (view === 'table') {
                 try {
                     const data = await fetchTaskList();
@@ -38,6 +42,14 @@ const Dashboard = () => {
                     setError("Failed to fetch tasks. Please try again later.");
                 }
               
+
+            try {
+                const data = await fetchTaskList();
+                setRows(data);
+            } catch (error) {
+                console.error("Error fetching tasks:", error);
+            //    setError("Failed to fetch tasks. Please try again later.");
+
             }
             if (view === 'leader') {
                 try {
@@ -74,8 +86,14 @@ const Dashboard = () => {
 
     const [userrowToEdit, setUserRowToEdit] = useState(null);
 
-    const handleUserDeleteRow = (targetIndex) => {
-        setUserRows(userrows.filter((_, idx) => idx !== targetIndex));
+    const handleUserDeleteRow = async (targetIndex) => {
+        try {
+            await deleteUser(userrows[targetIndex]); // Call deleteUser function
+            setUserRows(userrows.filter((_, idx) => idx !== targetIndex)); // Update rows after successful deletion
+        } catch (e) {
+            console.error("Error deleting User:", e);
+        }
+
     };
 
     const handleUserEditRow = (idx) => {
@@ -104,8 +122,8 @@ const Dashboard = () => {
         try {
             await deleteTask(rows[targetIndex].taskId); // Call deleteTask function
             setRows(rows.filter((_, idx) => idx !== targetIndex)); // Update rows after successful deletion
-        } catch (error) {
-            console.error("Error deleting task:", error);
+        } catch (e) {
+            console.error("Error deleting task:", e);
             // Handle error (e.g., display an error message to the user)
         }
     };
@@ -114,9 +132,11 @@ const Dashboard = () => {
         try {
             const data = await fetchCommentList(rows[idx].taskId);
             setCommentRows(data);
+          
         } catch (error) {
             console.error("Error fetching comment list:", error);
-            setError("Failed to fetch comment list. Please try again later.");
+          //  setError("Failed to fetch comment list. Please try again later.");
+
         }
         setRowToEdit(idx);
         setModalOpen(true);
@@ -139,12 +159,15 @@ const Dashboard = () => {
         handleLogout();
     }
 
-    const [signupUsername, setSignupUsername] = useState('');
-    const [signupName, setSignupName] = useState('');
-    const [signupEmail, setSignupEmail] = useState('');
-    const [userRole, setUserRole] = useState(role);
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
+
+
+   // const [signupUsername, setSignupUsername] = useState('');
+   // const [signupName, setSignupName] = useState('');
+    //const [signupEmail, setSignupEmail] = useState('');
+    const [userRole] = useState(role);
+   // const [error, setError] = useState('');
+   // const [success, setSuccess] = useState('');
+
 
 
 

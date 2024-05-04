@@ -21,7 +21,7 @@ function App() {
               </Route>
               <Route path="/userregistration" element={<UserRegistration />}>
               </Route>
-          </Routes>
+          </Routes>   
       </BrowserRouter>
 
   );
